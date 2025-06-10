@@ -1322,9 +1322,9 @@
                         <div class="section-header">
                             <span class="section-title">🗺️ Bitmaps (${bitmapResults.length})</span>
                             ${bitmapResults.length > 0 ? `
-                                <span style="font-size: 0.8rem; color: #666; margin-left: auto;">
-                                    Auto-loading visualizations...
-                                </span>
+                                <button class="btn-small" onclick="autoLoadBitmapVisualizations()" style="margin-left: auto;">
+                                    🎨 Auto-Load Visualizations
+                                </button>
                             ` : ''}
                         </div>
                         <div id="bitmapResults">
@@ -1341,13 +1341,6 @@
                     </div>
                 </div>
             `;
-            
-            // Auto-load all valid bitmap visualizations after a short delay
-            if (bitmapResults.length > 0) {
-                setTimeout(() => {
-                    autoLoadAllBitmapVisualizations(bitmapResults);
-                }, 500);
-            }
         }
 
         function generateBitmapCards(bitmapResults) {
@@ -1386,16 +1379,18 @@
                             <div style="font-size: 0.8rem; margin-bottom: 10px;">
                                 <strong>Status:</strong> ${validation.message}
                             </div>
-                              ${validation.status === 'valid' ? `
-                                <div class="bitmap-visualization">
+                            
+                            ${validation.status === 'valid' ? `                                <div class="bitmap-visualization">
                                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
                                         <strong style="font-size: 0.85rem;">🎨 Mondrian Pattern</strong>
-                                        <span style="font-size: 0.75rem; opacity: 0.8;">Auto-loaded • Click for fullscreen</span>
+                                        <button class="load-viz-btn" onclick="loadBitmapVisualization('${result.bitmapData.inscriptionId}', '${validation.details?.bitmapNumber}')">
+                                            🔄 Load Visualization
+                                        </button>
                                     </div>
                                     <div id="viz-${result.bitmapData.inscriptionId}" class="visualization-container">
                                         <div style="color: #fff; text-align: center; line-height: 250px; font-size: 0.85rem;">
-                                            🔄 Auto-loading visualization...<br>
-                                            <small style="opacity: 0.7;">Using real blockchain data + Mondrian layout</small>
+                                            Click "Load Visualization" to see bitmap pattern<br>
+                                            <small style="opacity: 0.7;">Uses real blockchain data + Mondrian layout</small>
                                         </div>
                                     </div>
                                 </div>
@@ -1512,7 +1507,6 @@
             contentCache.clear();
             validationCache.clear();
             bitmapCache.clear();
-            visualizationCache.clear();
             
             // Clear Mondrian module cache
             mondrianModule = null;
@@ -1521,12 +1515,13 @@
                 bitmapPages[i] = 0;
             }
             
-            console.log('All caches cleared including visualization cache');
-            alert('All caches cleared successfully! Visualizations will reload on next use.');
-        }// ==================== MONDRIAN BITMAP VISUALIZATION ====================
+            console.log('All caches cleared');
+            alert('All caches cleared successfully!');
+        }
+
+        // ==================== MONDRIAN BITMAP VISUALIZATION ====================
         // Mondrian Layout Module Cache
         let mondrianModule = null;
-        const visualizationCache = new Map();
 
         // Load Mondrian layout module
         async function loadMondrianModule() {
@@ -1541,143 +1536,6 @@
             } catch (error) {
                 debugLog('Failed to load Mondrian module:', error);
                 throw error;
-            }
-        }
-
-        // Create fullscreen modal for bitmap visualization
-        function createFullscreenModal() {
-            const modal = document.createElement('div');
-            modal.id = 'fullscreenModal';
-            modal.style.cssText = `
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100vw;
-                height: 100vh;
-                background: rgba(0, 0, 0, 0.95);
-                display: none;
-                justify-content: center;
-                align-items: center;
-                z-index: 10000;
-                backdrop-filter: blur(5px);
-            `;
-            
-            const content = document.createElement('div');
-            content.style.cssText = `
-                position: relative;
-                width: 90vw;
-                height: 90vh;
-                max-width: 1200px;
-                max-height: 1200px;
-                background: #000;
-                border-radius: 15px;
-                border: 3px solid #ff8800;
-                display: flex;
-                flex-direction: column;
-            `;
-            
-            const header = document.createElement('div');
-            header.style.cssText = `
-                padding: 15px 20px;
-                background: linear-gradient(135deg, #ff8800, #ff6600);
-                color: white;
-                font-weight: bold;
-                border-radius: 12px 12px 0 0;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-            `;
-            
-            const title = document.createElement('span');
-            title.id = 'modalTitle';
-            title.textContent = 'Bitmap Visualization';
-            
-            const closeBtn = document.createElement('button');
-            closeBtn.innerHTML = '✕';
-            closeBtn.style.cssText = `
-                background: none;
-                border: none;
-                color: white;
-                font-size: 24px;
-                cursor: pointer;
-                padding: 0;
-                width: 30px;
-                height: 30px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                border-radius: 50%;
-                transition: background 0.3s ease;
-            `;
-            closeBtn.onmouseover = () => closeBtn.style.background = 'rgba(255,255,255,0.2)';
-            closeBtn.onmouseout = () => closeBtn.style.background = 'none';
-            closeBtn.onclick = closeFullscreenModal;
-            
-            const vizContainer = document.createElement('div');
-            vizContainer.id = 'modalVizContainer';
-            vizContainer.style.cssText = `
-                flex: 1;
-                margin: 20px;
-                border-radius: 10px;
-                overflow: hidden;
-                position: relative;
-            `;
-            
-            header.appendChild(title);
-            header.appendChild(closeBtn);
-            content.appendChild(header);
-            content.appendChild(vizContainer);
-            modal.appendChild(content);
-            
-            // Close modal when clicking outside
-            modal.onclick = (e) => {
-                if (e.target === modal) closeFullscreenModal();
-            };
-            
-            // Close with ESC key
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && modal.style.display === 'flex') {
-                    closeFullscreenModal();
-                }
-            });
-            
-            document.body.appendChild(modal);
-            return modal;
-        }
-
-        function openFullscreenModal(bitmapNumber, inscriptionId, visualization) {
-            let modal = document.getElementById('fullscreenModal');
-            if (!modal) {
-                modal = createFullscreenModal();
-            }
-            
-            const title = document.getElementById('modalTitle');
-            const container = document.getElementById('modalVizContainer');
-            
-            title.textContent = `Bitmap ${bitmapNumber} - Full View`;
-            container.innerHTML = '';
-            
-            if (visualization) {
-                // Clone the visualization for fullscreen
-                const clone = visualization.cloneNode(true);
-                clone.style.width = '100%';
-                clone.style.height = '100%';
-                container.appendChild(clone);
-            } else {
-                container.innerHTML = '<div style="color: white; text-align: center; line-height: 100%; display: flex; align-items: center; justify-content: center;">Loading fullscreen visualization...</div>';
-                // Generate new fullscreen visualization
-                loadBitmapVisualization(`modal-${inscriptionId}`, bitmapNumber, container);
-            }
-            
-            modal.style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeFullscreenModal() {
-            const modal = document.getElementById('fullscreenModal');
-            if (modal) {
-                modal.style.display = 'none';
-                document.body.style.overflow = 'auto';
             }
         }
 
@@ -1764,36 +1622,18 @@
                 ctx.lineWidth = 1;
                 ctx.strokeRect(rectX, rectY, w, h);
             }
-        }        // Main bitmap visualization function with auto-loading, caching, and fullscreen support
-        async function loadBitmapVisualization(inscriptionId, bitmapNumber, customContainer = null) {
-            const containerId = `viz-${inscriptionId}`;
-            const container = customContainer || document.getElementById(containerId);
-            if (!container) return;
+        }
 
-            // Check cache first for session storage
-            const cacheKey = `viz-${bitmapNumber}`;
-            if (visualizationCache.has(cacheKey) && !customContainer) {
-                const cachedViz = visualizationCache.get(cacheKey);
-                container.innerHTML = '';
-                const clone = cachedViz.cloneNode(true);
-                container.appendChild(clone);
-                
-                // Add fullscreen click handler to cached visualization
-                clone.style.cursor = 'pointer';
-                clone.title = 'Click to view fullscreen';
-                clone.onclick = () => openFullscreenModal(bitmapNumber, inscriptionId, clone);
-                
-                debugLog(`Used cached visualization for bitmap ${bitmapNumber}`);
-                return clone;
-            }
+        // Main bitmap visualization function using Mondrian layout
+        async function loadBitmapVisualization(inscriptionId, bitmapNumber) {
+            const container = document.getElementById(`viz-${inscriptionId}`);
+            if (!container) return;
 
             try {
                 // Show loading state
-                container.innerHTML = '<div style="color: #fff; text-align: center; line-height: 250px; font-size: 0.8rem;">🔄 Loading Mondrian pattern...</div>';
+                container.innerHTML = '<div style="color: #fff; text-align: center; line-height: 250px; font-size: 0.8rem;">🔄 Loading bitmap pattern...</div>';
                 
                 debugLog(`Loading bitmap visualization for ${bitmapNumber}`, { inscriptionId, bitmapNumber });
-                
-                let visualizationElement = null;
                 
                 // Try to load Mondrian module first
                 try {
@@ -1814,196 +1654,35 @@
                         const containerHeight = container.offsetHeight || 250;
                         const scale = Math.min(containerWidth / mondrian.width, containerHeight / mondrian.height);
 
-                        // Clear container and setup
+                        // Clear container and render squares
                         container.innerHTML = '';
                         container.style.position = 'relative';
                         container.style.width = `${containerWidth}px`;
                         container.style.height = `${containerHeight}px`;
                         container.style.backgroundColor = '#000';
-                        container.style.borderRadius = '10px';
-                        container.style.overflow = 'hidden';
 
-                        // Add header info with block details
-                        const infoDiv = document.createElement('div');
-                        infoDiv.style.cssText = `
-                            position: absolute;
-                            top: 5px;
-                            left: 5px;
-                            right: 5px;
-                            background: rgba(0,0,0,0.8);
-                            color: #ff8800;
-                            padding: 5px 8px;
-                            border-radius: 5px;
-                            font-size: 10px;
-                            z-index: 10;
-                            text-align: center;
-                        `;
-                        infoDiv.textContent = `Block: ${blockData.height || 'Unknown'} | ${blockData.tx.length} TXs | Real Mondrian Layout`;
-                        container.appendChild(infoDiv);
-
-                        // Render Mondrian squares
                         mondrian.slots.forEach((slot, i) => {
                             const div = document.createElement('div');
                             Object.assign(div.style, {
                                 position: 'absolute',
                                 left: `${slot.position.x * scale}px`,
-                                top: `${slot.position.y * scale + 25}px`, // Offset for header
+                                top: `${slot.position.y * scale}px`,
                                 width: `${(slot.size - 0.5) * scale}px`,
                                 height: `${(slot.size - 0.5) * scale}px`,
                                 backgroundColor: '#ff8800',
                                 border: '0.5px solid #333',
-                                transition: 'all 0.3s ease',
-                                borderRadius: '1px'
+                                transition: 'background-color 0.2s ease',
+                                cursor: 'pointer'
                             });
 
-                            // Enhanced hover effects with transaction info
+                            // Add hover effects with transaction info
                             div.onmouseover = () => { 
-                                div.style.backgroundColor = '#ff4444';
-                                div.style.transform = 'scale(1.05)';
-                                div.style.zIndex = '20';
+                                div.style.backgroundColor = '#ff4444'; 
                                 if (blockData.tx[i]) {
                                     const txValue = blockData.tx[i].out.reduce((s, o) => s + o.value, 0);
                                     div.title = `TX ${i}: ${(txValue / 100000000).toFixed(8)} BTC`;
                                 }
                             };
-                            div.onmouseout = () => { 
-                                div.style.backgroundColor = '#ff8800';
-                                div.style.transform = 'scale(1)';
-                                div.style.zIndex = '1';
-                            };
-                            
-                            container.appendChild(div);
-                        });
-
-                        visualizationElement = container;
-                        debugLog(`Real Mondrian visualization rendered: ${mondrian.slots.length} squares`);
-                    }
-                } catch (mondrianError) {
-                    debugLog(`Mondrian visualization failed, falling back to enhanced pattern:`, mondrianError);
-                }
-                
-                // Fallback to enhanced generated pattern if Mondrian fails
-                if (!visualizationElement) {
-                    visualizationElement = await generateAdvancedFallbackPattern(container, bitmapNumber);
-                }
-                
-                // Cache the visualization for session (only for small containers, not fullscreen)
-                if (!customContainer && visualizationElement) {
-                    const cacheClone = visualizationElement.cloneNode(true);
-                    visualizationCache.set(cacheKey, cacheClone);
-                    debugLog(`Cached visualization for bitmap ${bitmapNumber}`);
-                }
-
-                // Add fullscreen click handler (only for regular containers, not fullscreen modals)
-                if (visualizationElement && !customContainer) {
-                    visualizationElement.style.cursor = 'pointer';
-                    visualizationElement.title = 'Click to view fullscreen';
-                    visualizationElement.onclick = () => openFullscreenModal(bitmapNumber, inscriptionId, visualizationElement);
-                }
-                
-                return visualizationElement;
-                
-            } catch (error) {
-                debugLog(`Error loading bitmap visualization:`, error);
-                container.innerHTML = `<div style="color: #e74c3c; text-align: center; line-height: 250px; font-size: 0.8rem;">❌ Visualization Error<br><small>${error.message}</small></div>`;
-                return null;
-            }
-        }
-
-        // Enhanced fallback pattern generator with better aesthetics
-        async function generateAdvancedFallbackPattern(container, bitmapNumber) {
-            try {
-                const containerWidth = container.offsetWidth || 250;
-                const containerHeight = container.offsetHeight || 250;
-                
-                // Clear container and setup
-                container.innerHTML = '';
-                container.style.position = 'relative';
-                container.style.width = `${containerWidth}px`;
-                container.style.height = `${containerHeight}px`;
-                container.style.backgroundColor = '#000';
-                container.style.borderRadius = '10px';
-                container.style.overflow = 'hidden';
-
-                // Add header info
-                const infoDiv = document.createElement('div');
-                infoDiv.style.cssText = `
-                    position: absolute;
-                    top: 5px;
-                    left: 5px;
-                    right: 5px;
-                    background: rgba(0,0,0,0.8);
-                    color: #ff8800;
-                    padding: 5px 8px;
-                    border-radius: 5px;
-                    font-size: 10px;
-                    z-index: 10;
-                    text-align: center;
-                `;
-                infoDiv.textContent = `Bitmap ${bitmapNumber} | Generated Pattern | Fallback Mode`;
-                container.appendChild(infoDiv);
-
-                // Generate enhanced Mondrian-style pattern
-                const seed = parseInt(bitmapNumber) || Math.floor(Math.random() * 1000);
-                const random = (seed) => {
-                    let x = Math.sin(seed) * 10000;
-                    return x - Math.floor(x);
-                };
-                
-                // Generate pattern based on bitmap number for consistency
-                const numRects = 8 + (seed % 15);
-                const colors = ['#ff8800', '#ff4444', '#44ff88', '#4488ff', '#ffff44', '#ff44ff', '#44ffff'];
-                
-                for (let i = 0; i < numRects; i++) {
-                    const x = random(seed + i) * (containerWidth * 0.8);
-                    const y = 25 + random(seed + i * 2) * ((containerHeight - 25) * 0.8); // Offset for header
-                    const w = 20 + random(seed + i * 3) * (containerWidth * 0.25);
-                    const h = 20 + random(seed + i * 4) * ((containerHeight - 25) * 0.25);
-                    
-                    // Ensure rectangles don't go out of bounds
-                    const rectX = Math.min(x, containerWidth - w);
-                    const rectY = Math.min(y, containerHeight - h);
-                    
-                    const div = document.createElement('div');
-                    const color = colors[i % colors.length];
-                    Object.assign(div.style, {
-                        position: 'absolute',
-                        left: `${rectX}px`,
-                        top: `${rectY}px`,
-                        width: `${w}px`,
-                        height: `${h}px`,
-                        backgroundColor: color,
-                        border: '1px solid #333',
-                        borderRadius: '2px',
-                        transition: 'all 0.3s ease',
-                        opacity: '0.8'
-                    });
-
-                    // Add hover effects
-                    div.onmouseover = () => { 
-                        div.style.opacity = '1';
-                        div.style.transform = 'scale(1.02)';
-                        div.style.zIndex = '20';
-                        div.title = `Pattern Element ${i + 1}`;
-                    };
-                    div.onmouseout = () => { 
-                        div.style.opacity = '0.8';
-                        div.style.transform = 'scale(1)';
-                        div.style.zIndex = '1';
-                    };
-                    
-                    container.appendChild(div);
-                }
-                
-                debugLog(`Generated enhanced fallback pattern for bitmap ${bitmapNumber}`);
-                return container;
-                
-            } catch (error) {
-                container.innerHTML = `<div style="color: #e74c3c; text-align: center; line-height: 250px; font-size: 0.8rem;">Pattern Error</div>`;
-                debugLog(`Failed to generate enhanced fallback pattern:`, error);
-                return null;
-            }
-        }
                             div.onmouseout = () => { 
                                 div.style.backgroundColor = '#ff8800'; 
                                 div.title = '';
@@ -2026,59 +1705,37 @@
                 debugLog(`Error loading bitmap visualization:`, error);
                 container.innerHTML = `<div style="color: #e74c3c; text-align: center; line-height: 250px; font-size: 0.8rem;">❌ Visualization Error</div>`;
             }
-        }        // Auto-load all bitmap visualizations automatically
-        async function autoLoadAllBitmapVisualizations(bitmapResults) {
-            debugLog(`Auto-loading ${bitmapResults.length} bitmap visualizations...`);
-            
-            // Filter to only valid bitmaps that have the necessary data
-            const validBitmaps = bitmapResults.filter(result => 
-                result.bitmapData?.validation?.status === 'valid' && 
-                result.bitmapData.inscriptionId &&
-                result.bitmapData.validation.details?.bitmapNumber
-            );
-            
-            if (validBitmaps.length === 0) {
-                debugLog('No valid bitmaps found to auto-load');
-                return;
-            }
-            
-            debugLog(`Auto-loading ${validBitmaps.length} valid bitmap visualizations`);
-            
-            // Load all bitmap visualizations with staggered timing to avoid overwhelming the browser
-            for (let i = 0; i < validBitmaps.length; i++) {
-                const result = validBitmaps[i];
-                const inscriptionId = result.bitmapData.inscriptionId;
-                const bitmapNumber = result.bitmapData.validation.details.bitmapNumber;
-                
-                try {
-                    debugLog(`Auto-loading visualization ${i + 1}/${validBitmaps.length}: bitmap ${bitmapNumber}`);
-                    
-                    // Check if container exists
-                    const container = document.getElementById(`viz-${inscriptionId}`);
-                    if (container) {
-                        await loadBitmapVisualization(inscriptionId, bitmapNumber);
-                        
-                        // Add staggered delay between loads to prevent browser freezing
-                        if (i < validBitmaps.length - 1) {
-                            await new Promise(resolve => setTimeout(resolve, 800));
-                        }
-                    } else {
-                        debugLog(`Container not found for inscription ${inscriptionId}`);
-                    }
-                } catch (error) {
-                    debugLog(`Failed to auto-load visualization for bitmap ${bitmapNumber}:`, error);
-                }
-            }
-            
-            debugLog(`Completed auto-loading ${validBitmaps.length} bitmap visualizations`);
         }
 
-        // Legacy function for manual trigger (kept for compatibility)
+        // Auto-load bitmap visualizations
         async function autoLoadBitmapVisualizations() {
             if (!currentAnalysis) return;
             
-            const bitmapResults = currentAnalysis.filter(r => r.protocols.includes('bitmap'));
-            await autoLoadAllBitmapVisualizations(bitmapResults);
+            const bitmapResults = currentAnalysis.filter(r => r.protocols.includes('bitmap') && r.bitmapData?.validation?.status === 'valid');
+            
+            if (bitmapResults.length === 0) {
+                alert('No valid bitmaps found to visualize');
+                return;
+            }
+            
+            // Load first 3 bitmap visualizations automatically
+            const toLoad = bitmapResults.slice(0, 3);
+            
+            for (const result of toLoad) {
+                const inscriptionId = result.bitmapData.inscriptionId;
+                const bitmapNumber = result.bitmapData.validation.details?.bitmapNumber;
+                
+                if (inscriptionId && bitmapNumber) {
+                    debugLog(`Auto-loading visualization for bitmap ${bitmapNumber}`);
+                    await loadBitmapVisualization(inscriptionId, bitmapNumber);
+                    // Small delay between loads
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                }
+            }
+            
+            if (bitmapResults.length > 3) {
+                debugLog(`Auto-loaded first 3 visualizations. ${bitmapResults.length - 3} more available to load manually.`);
+            }
         }
 
         // Test bitmap validation function
@@ -2106,12 +1763,10 @@
             if (event.key === 'Enter') {
                 analyzeAddress();
             }
-        });        // Make functions globally available
+        });
+
+        // Make functions globally available
         window.loadBitmapVisualization = loadBitmapVisualization;
-        window.autoLoadBitmapVisualizations = autoLoadBitmapVisualizations;
-        window.autoLoadAllBitmapVisualizations = autoLoadAllBitmapVisualizations;
-        window.openFullscreenModal = openFullscreenModal;
-        window.closeFullscreenModal = closeFullscreenModal;
         window.clearAllCaches = clearAllCaches;
         window.testBitmapValidation = testBitmapValidation;
         window.analyzeAddress = analyzeAddress;
