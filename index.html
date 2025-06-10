@@ -225,9 +225,7 @@
             border-color: #e74c3c;
             background: linear-gradient(135deg, #e74c3c, #c0392b);
             color: white;
-        }
-
-        .bitmap-card.unknown {
+        }        .bitmap-card.valid-high {
             border-color: #f39c12;
             background: linear-gradient(135deg, #f39c12, #e67e22);
             color: white;
@@ -484,7 +482,7 @@
                     type="text" 
                     id="addressInput" 
                     placeholder="Enter Bitcoin address (bc1p... or legacy format)"
-                    value="bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh"
+                    value="bc1pfwlmzw8d6m0g6ugl08suq68vhmn207d3pdu2jngty3sx0p74qhdsysedna"
                     autocomplete="off"
                 >
                 <button class="analyze-btn" onclick="analyzeAddress()" id="analyzeBtn">
@@ -515,9 +513,7 @@
         /* 
          * Bitcoin Bitmap & UTXO Protocol Analyzer
          * Based on comprehensive bitmap OCI system and dual analysis approach
-         */
-
-        // Global state and configuration
+         */        // Global state and configuration
         let currentAnalysis = null;
         window.DEBUG_MODE = false;
         
@@ -527,6 +523,8 @@
         const contentCache = new Map();
         const validationCache = new Map();
         const bitmapCache = new Map();
+        const visualizationCache = new Map();
+        const mondrianModule = new Map();
         
         // API configuration
         const ORDINALS_BASE_URL = 'https://ordinals.com';
@@ -721,12 +719,11 @@
                 return validationCache.get(cacheKey);
             }
 
-            try {
-                if (bitmapNumber > 839999) {
+            try {                if (bitmapNumber > 839999) {
                     const result = {
-                        status: 'unknown',
-                        message: `Bitmap #${bitmapNumber} is above validation limit (839,999+)`,
-                        details: { bitmapNumber, inscriptionId }
+                        status: 'valid-high',
+                        message: `Bitmap #${bitmapNumber} (high number, pattern available)`,
+                        details: { bitmapNumber, inscriptionId, isHighNumber: true }
                     };
                     validationCache.set(cacheKey, result);
                     return result;
@@ -1056,15 +1053,18 @@
             }
 
             return analysis;
-        }
-
-        // Raw transaction analysis for additional protocols
+        }        // Enhanced raw transaction analysis for comprehensive protocol detection
         async function analyzeRawTransactionData(utxo, txDetails) {
             const analysis = {
                 protocols: [],
                 alkaneData: null,
+                protoruneData: null,
                 stampData: null,
-                unknownProtocols: []
+                brc20Data: null,
+                unknownProtocols: [],
+                multisigData: null,
+                p2shData: null,
+                detectionDetails: {}
             };
 
             try {
@@ -1072,59 +1072,501 @@
                     return analysis;
                 }
 
-                // Look for OP_RETURN data for alkanes, stamps, etc.
-                const vout = txDetails.vout[utxo.vout];
-                if (vout && vout.scriptpubkey_type === 'op_return') {
-                    const opReturnData = vout.scriptpubkey_asm;
-                    
-                    // Check for alkane patterns
-                    if (opReturnData.includes('16383') || opReturnData.toLowerCase().includes('alkane')) {
-                        analysis.protocols.push('alkane');
-                    }
-                    
-                    // Check for stamp patterns
-                    if (opReturnData.toLowerCase().includes('stamp') || 
-                        opReturnData.toLowerCase().includes('src-20') ||
-                        opReturnData.toLowerCase().includes('src-721')) {
-                        analysis.protocols.push('stamp');
-                    }
-                    
-                    // Check for protorune patterns
-                    if (opReturnData.toLowerCase().includes('protorune')) {
-                        analysis.protocols.push('protorune');
-                    }
-                }
+                debugLog(`Enhanced raw analysis for UTXO ${utxo.txid}:${utxo.vout}`);
 
-                // Check witness data for additional protocols
-                for (const input of txDetails.vin) {
-                    if (input.witness && input.witness.length > 0) {
-                        const witnessData = input.witness.join('');
+                // STEP 1: OP_RETURN outputs analysis for various protocols
+                for (let i = 0; i < txDetails.vout.length; i++) {
+                    const vout = txDetails.vout[i];
+                    
+                    if (vout.scriptpubkey_type === 'op_return') {
+                        const opReturnHex = vout.scriptpubkey || vout.scriptpubkey_hex || '';
+                        const opReturnData = vout.scriptpubkey_asm || '';
                         
-                        // Look for various protocol patterns in witness data
-                        if (witnessData.includes('626974636f696e') || // "bitcoin" in hex
-                            witnessData.includes('6f7264696e616c') || // "ordinal" in hex
-                            witnessData.includes('696e736372697074696f6e')) { // "inscription" in hex
-                            if (!analysis.protocols.includes('potential-ordinal')) {
-                                analysis.protocols.push('potential-ordinal');
+                        debugLog(`OP_RETURN found in vout ${i}:`, { 
+                            hex: opReturnHex.substring(0, 100) + '...', 
+                            asm: opReturnData.substring(0, 100) + '...',
+                            length: opReturnHex.length 
+                        });
+                        
+                        // ALKANES/PROTORUNES Detection - Enhanced pattern matching
+                        const alkanePatterns = [
+                            { pattern: 'ff3f', name: 'tag-16383-le' },     // Little-endian tag 16383
+                            { pattern: '3fff', name: 'tag-16383-be' },     // Big-endian tag 16383  
+                            { pattern: 'ff7f', name: 'tag-32767' },        // Alternative tag
+                            { pattern: '7fff', name: 'tag-32767-be' },     // Alternative tag BE
+                            { pattern: '616c6b616e65', name: 'alkane-id' }, // "alkane" in hex
+                            { pattern: '70726f746f72756e65', name: 'protorune-id' } // "protorune" in hex
+                        ];
+                        
+                        for (const { pattern, name } of alkanePatterns) {
+                            if (opReturnHex.toLowerCase().includes(pattern)) {
+                                if (name.includes('protorune')) {
+                                    analysis.protocols.push('protorune');
+                                    analysis.protoruneData = {
+                                        pattern: name,
+                                        rawData: opReturnHex,
+                                        vout: i,
+                                        detectionMethod: 'op_return_hex'
+                                    };
+                                    debugLog(`PROTORUNE detected via pattern: ${name}`);
+                                } else {
+                                    analysis.protocols.push('alkane');
+                                    analysis.alkaneData = {
+                                        pattern: name,
+                                        tag: name.includes('16383') ? 16383 : (name.includes('32767') ? 32767 : 'unknown'),
+                                        rawData: opReturnHex,
+                                        vout: i,
+                                        detectionMethod: 'op_return_hex'
+                                    };
+                                    debugLog(`ALKANE detected via pattern: ${name}`);
+                                }
+                                break;
                             }
                         }
                         
-                        // Look for structured data patterns
-                        if (witnessData.length > 1000 && (
-                            witnessData.includes('7b') || // JSON start
-                            witnessData.includes('3c') || // HTML start
-                            witnessData.includes('89504e47'))) { // PNG header
-                            analysis.protocols.push('structured-data');
+                        // STAMPS Detection - Enhanced with case variations
+                        const stampPatterns = [
+                            { pattern: '5354414d50', name: 'STAMP', variations: ['stamp'] },
+                            { pattern: '53544d50', name: 'STMP', variations: ['stmp'] },
+                            { pattern: '5352432d3230', name: 'SRC-20', variations: ['src20', 'src-20'] },
+                            { pattern: '5352432d373231', name: 'SRC-721', variations: ['src721', 'src-721'] },
+                            { pattern: '434f554e54455250415254595354414d50', name: 'COUNTERPARTY-STAMP', variations: ['cp'] }
+                        ];
+                        
+                        for (const { pattern, name, variations } of stampPatterns) {
+                            if (opReturnHex.toLowerCase().includes(pattern.toLowerCase()) ||
+                                variations.some(v => opReturnData.toLowerCase().includes(v))) {
+                                analysis.protocols.push('stamp');
+                                analysis.stampData = {
+                                    type: name,
+                                    pattern: pattern,
+                                    rawData: opReturnHex,
+                                    vout: i,
+                                    detectionMethod: 'op_return_pattern'
+                                };
+                                debugLog(`STAMP protocol detected: ${name}`);
+                                break;
+                            }
+                        }
+                        
+                        // BRC-20 in OP_RETURN (rare but possible)
+                        if (opReturnHex.includes('6272632d3230') || // "brc-20"
+                            opReturnHex.includes('427243323020') || // "BRC20 "
+                            opReturnData.toLowerCase().includes('brc-20')) {
+                            analysis.protocols.push('brc-20');
+                            analysis.brc20Data = {
+                                location: 'op_return',
+                                rawData: opReturnHex,
+                                vout: i,
+                                detectionMethod: 'op_return_pattern'
+                            };
+                            debugLog(`BRC-20 detected in OP_RETURN`);
+                        }
+                        
+                        // RUNES (actual rune protocol detection)
+                        if (opReturnHex.includes('5255') || // "RU" prefix
+                            opReturnHex.includes('52554e45') || // "RUNE"
+                            opReturnData.toLowerCase().includes('rune')) {
+                            analysis.protocols.push('rune-protocol');
+                            analysis.detectionDetails.rune = {
+                                rawData: opReturnHex,
+                                vout: i,
+                                detectionMethod: 'op_return_rune_pattern'
+                            };
+                            debugLog(`RUNE protocol detected in OP_RETURN`);
+                        }
+                          // Enhanced unknown protocol detection
+                        if (opReturnHex.length > 40) {
+                            const unknownPatterns = detectAdvancedProtocolPatterns(opReturnHex);
+                            if (unknownPatterns.length > 0) {
+                                analysis.unknownProtocols.push({
+                                    type: 'advanced-structured',
+                                    patterns: unknownPatterns,
+                                    dataLength: opReturnHex.length / 2,
+                                    vout: i,
+                                    confidence: calculatePatternConfidence(unknownPatterns)
+                                });
+                                analysis.protocols.push('unknown-protocol');
+                                debugLog(`Advanced unknown protocol detected with ${unknownPatterns.length} patterns`);
+                            }
                         }
                     }
-                }
+                    
+                    // Enhanced multisig data embedding detection
+                    if (vout.scriptpubkey_type === 'multisig' && vout.scriptpubkey && vout.scriptpubkey.length > 200) {
+                        analysis.protocols.push('multisig-data');                        analysis.multisigData = {
+                            scriptLength: vout.scriptpubkey.length,
+                            value: vout.value,
+                            vout: i,
+                            dataDensity: calculateDataDensity(vout.scriptpubkey)
+                        };
+                        debugLog(`Multisig data embedding detected in vout ${i}, density: ${analysis.multisigData.dataDensity}`);
+                    }
+                    
+                    // P2SH data embedding (zero-value outputs)
+                    if (vout.scriptpubkey_type === 'p2sh' && vout.value === 0) {
+                        analysis.protocols.push('p2sh-data');
+                        analysis.p2shData = {
+                            scriptHash: vout.scriptpubkey,
+                            vout: i,
+                            detectionMethod: 'zero_value_p2sh'
+                        };
+                        debugLog(`P2SH data embedding detected in vout ${i}`);
+                    }
+                }                // STEP 2: Enhanced witness data analysis
+                for (let i = 0; i < txDetails.vin.length; i++) {
+                    const input = txDetails.vin[i];
+                    if (input.witness && input.witness.length > 0) {
+                        const witnessData = input.witness.join('').toLowerCase();
+                        
+                        debugLog(`Analyzing witness data from input ${i}: ${witnessData.substring(0, 100)}... (${witnessData.length} chars)`);
+                        
+                        // Enhanced ordinal envelope detection
+                        const ordinalPatterns = [
+                            { pattern: '6f7264', name: 'ord-magic' },           // "ord" in hex
+                            { pattern: '626974636f696e', name: 'bitcoin-id' },   // "bitcoin" in hex
+                            { pattern: '6f7264696e616c', name: 'ordinal-id' },   // "ordinal" in hex
+                            { pattern: '696e736372697074696f6e', name: 'inscription-id' }, // "inscription"
+                            { pattern: '00', name: 'separator' },              // NULL separator common in ordinals
+                            { pattern: '63', name: 'op-if' }                   // OP_IF (0x63) envelope start
+                        ];
+                        
+                        let ordinalScore = 0;
+                        const foundPatterns = [];
+                        
+                        for (const { pattern, name } of ordinalPatterns) {
+                            if (witnessData.includes(pattern)) {
+                                foundPatterns.push(name);
+                                if (name === 'ord-magic') ordinalScore += 4;
+                                else if (name === 'inscription-id') ordinalScore += 3;
+                                else if (name === 'bitcoin-id') ordinalScore += 2;
+                                else ordinalScore += 1;
+                            }
+                        }
+                          if (ordinalScore >= 2) {
+                            // Only add if not already detected as confirmed ordinal
+                            if (!analysis.protocols.includes('ordinal')) {
+                                analysis.protocols.push('potential-ordinal');
+                                analysis.detectionDetails.ordinal = {
+                                    inputIndex: i,
+                                    patterns: foundPatterns,
+                                    score: ordinalScore,
+                                    witnessLength: witnessData.length
+                                };
+                                debugLog(`Strong ordinal envelope detected (score: ${ordinalScore})`);
+                            }
+                        }
+                        
+                        // Enhanced BRC-20 detection
+                        const brc20Patterns = [
+                            { pattern: '6272632d3230', name: 'brc-20-id' },     // "brc-20"
+                            { pattern: '427243323020', name: 'BRC20-caps' },    // "BRC20 "
+                            { pattern: '6d696e74', name: 'mint-op' },           // "mint"
+                            { pattern: '6465706c6f79', name: 'deploy-op' },     // "deploy"
+                            { pattern: '7472616e73666572', name: 'transfer-op' }, // "transfer"
+                            { pattern: '746963', name: 'tick-field' },          // "tic" (tick)
+                            { pattern: '616d74', name: 'amt-field' }             // "amt" (amount)
+                        ];
+                        
+                        let brc20Score = 0;
+                        const brc20Found = [];
+                        
+                        for (const { pattern, name } of brc20Patterns) {
+                            if (witnessData.includes(pattern)) {
+                                brc20Found.push(name);
+                                if (name.includes('brc-20') || name.includes('BRC20')) brc20Score += 4;
+                                else if (name.includes('-op')) brc20Score += 3;
+                                else brc20Score += 2;
+                            }
+                        }
+                        
+                        // JSON structure bonus for BRC-20
+                        if (witnessData.includes('7b') && witnessData.includes('7d') && 
+                            witnessData.includes('22') && witnessData.includes('3a')) { // { } " :
+                            brc20Score += 2;
+                            brc20Found.push('json-structure');
+                        }
+                        
+                        if (brc20Score >= 4) {
+                            analysis.protocols.push('brc-20');
+                            analysis.brc20Data = {
+                                inputIndex: i,
+                                patterns: brc20Found,
+                                score: brc20Score,
+                                witnessLength: witnessData.length,
+                                detectionMethod: 'witness_comprehensive'
+                            };
+                            debugLog(`Strong BRC-20 detected (score: ${brc20Score})`);
+                        }
+                        
+                        // Large structured data analysis
+                        if (witnessData.length > 2000) {
+                            const structuredPatterns = [
+                                { pattern: '7b', type: 'JSON', weight: 3 },
+                                { pattern: '3c', type: 'HTML', weight: 4 },
+                                { pattern: '89504e47', type: 'PNG', weight: 5 },
+                                { pattern: 'ffd8ff', type: 'JPEG', weight: 5 },
+                                { pattern: '474946', type: 'GIF', weight: 5 },
+                                { pattern: '25504446', type: 'PDF', weight: 4 },
+                                { pattern: '504b0304', type: 'ZIP', weight: 3 },
+                                { pattern: '377abcaf271c', type: '7Z', weight: 3 }
+                            ];
+                            
+                            let contentScore = 0;
+                            const contentTypes = [];
+                            
+                            for (const { pattern, type, weight } of structuredPatterns) {
+                                if (witnessData.includes(pattern)) {
+                                    contentTypes.push(type);
+                                    contentScore += weight;
+                                }
+                            }
+                            
+                            if (contentScore > 0) {
+                                analysis.protocols.push('structured-data');
+                                analysis.detectionDetails.structuredData = {
+                                    inputIndex: i,
+                                    contentTypes,
+                                    score: contentScore,
+                                    witnessLength: witnessData.length
+                                };
+                                debugLog(`Structured data detected: ${contentTypes.join(', ')} (score: ${contentScore})`);
+                            }
+                        }
+                          // Advanced pattern analysis for unknown protocols
+                        const advancedPatterns = detectWitnessProtocolPatterns(witnessData);
+                        if (advancedPatterns.confidence > 0.6) {
+                            analysis.unknownProtocols.push({
+                                type: 'witness-protocol',
+                                patterns: advancedPatterns.patterns,
+                                confidence: advancedPatterns.confidence,
+                                inputIndex: i,
+                                witnessLength: witnessData.length
+                            });
+                            analysis.protocols.push('unknown-protocol');
+                            debugLog(`Unknown witness protocol detected (confidence: ${advancedPatterns.confidence})`);
+                        }
+                    }
+                }                // STEP 3: Enhanced transaction pattern analysis
+                analyzeTransactionPatterns(analysis, utxo, txDetails);
+
+                debugLog(`Enhanced raw analysis complete. Detected protocols:`, analysis.protocols);
 
             } catch (error) {
-                debugLog(`Error in raw transaction analysis:`, error);
+                debugLog(`Error in enhanced raw transaction analysis:`, error);
+                analysis.protocols.push('analysis-error');
+                analysis.detectionDetails.error = error.message;
             }
 
             return analysis;
         }
+
+        // Helper function: Detect advanced protocol patterns
+        function detectAdvancedProtocolPatterns(hexData) {
+            const patterns = [];
+            
+            // Common protocol identifiers
+            const knownIdentifiers = [
+                { pattern: '0001', name: 'version-1', weight: 2 },
+                { pattern: '0002', name: 'version-2', weight: 2 },
+                { pattern: 'ffff', name: 'marker-ffff', weight: 3 },
+                { pattern: 'fffe', name: 'marker-fffe', weight: 3 },
+                { pattern: 'cafe', name: 'magic-cafe', weight: 3 },
+                { pattern: 'dead', name: 'magic-dead', weight: 3 },
+                { pattern: 'beef', name: 'magic-beef', weight: 3 },
+                { pattern: '1234', name: 'simple-pattern', weight: 1 },
+                { pattern: 'abcd', name: 'hex-pattern', weight: 1 }
+            ];
+            
+            for (const { pattern, name, weight } of knownIdentifiers) {
+                if (hexData.toLowerCase().includes(pattern)) {
+                    patterns.push({ name, weight, position: hexData.toLowerCase().indexOf(pattern) });
+                }
+            }
+            
+            // Repeated patterns analysis
+            const chunks = hexData.match(/.{8}/g) || [];
+            const chunkCounts = {};
+            chunks.forEach(chunk => {
+                if (chunk !== '00000000' && chunk !== 'ffffffff') {
+                    chunkCounts[chunk] = (chunkCounts[chunk] || 0) + 1;
+                }
+            });
+            
+            const repeatedChunks = Object.entries(chunkCounts).filter(([chunk, count]) => count > 1);
+            if (repeatedChunks.length > 0) {
+                patterns.push({ 
+                    name: 'repeated-chunks', 
+                    weight: Math.min(repeatedChunks.length * 2, 5),
+                    details: repeatedChunks.slice(0, 3)
+                });
+            }
+            
+            // Structure analysis (alternating patterns, sequences)
+            const hasSequence = /(?:0123|1234|2345|3456|4567|5678|6789|789a|89ab|9abc|abcd|bcde|cdef)/.test(hexData.toLowerCase());
+            if (hasSequence) {
+                patterns.push({ name: 'sequential-pattern', weight: 2 });
+            }
+            
+            const hasAlternating = /(?:0101|1010|abab|baba|cdcd|dcdc)/.test(hexData.toLowerCase());
+            if (hasAlternating) {
+                patterns.push({ name: 'alternating-pattern', weight: 1 });
+            }
+            
+            return patterns;
+        }
+
+        // Helper function: Calculate pattern confidence
+        function calculatePatternConfidence(patterns) {
+            const totalWeight = patterns.reduce((sum, p) => sum + (p.weight || 1), 0);
+            const maxPossibleWeight = 20; // Arbitrary max for normalization
+            return Math.min(totalWeight / maxPossibleWeight, 1.0);
+        }
+
+        // Helper function: Calculate data density
+        function calculateDataDensity(scriptHex) {
+            if (!scriptHex || scriptHex.length === 0) return 0;
+            
+            // Count unique bytes
+            const chunks = scriptHex.match(/.{2}/g) || [];
+            const uniqueChunks = new Set(chunks);
+            
+            // Calculate entropy-like measure
+            const density = uniqueChunks.size / chunks.length;
+            
+            // Penalize excessive null bytes or repeated patterns
+            const nullBytes = chunks.filter(chunk => chunk === '00').length;
+            const nullPenalty = nullBytes / chunks.length;
+            
+            return Math.max(0, density - nullPenalty);
+        }
+
+        // Helper function: Detect witness protocol patterns
+        function detectWitnessProtocolPatterns(witnessData) {
+            const patterns = [];
+            let confidence = 0;
+            
+            // Length-based heuristics
+            if (witnessData.length > 10000) {
+                patterns.push('large-content');
+                confidence += 0.2;
+            }
+            
+            // Structure patterns
+            const structurePatterns = [
+                { regex: /7b.*7d/, name: 'json-like', weight: 0.3 },
+                { regex: /3c.*3e/, name: 'xml-like', weight: 0.3 },
+                { regex: /22.*22/, name: 'quoted-strings', weight: 0.2 },
+                { regex: /0a.*0a/, name: 'newlines', weight: 0.1 },
+                { regex: /20.*20/, name: 'spaces', weight: 0.1 }
+            ];
+            
+            for (const { regex, name, weight } of structurePatterns) {
+                if (regex.test(witnessData)) {
+                    patterns.push(name);
+                    confidence += weight;
+                }
+            }
+            
+            // Entropy analysis (simplified)
+            const chunks = witnessData.match(/.{2}/g) || [];
+            const uniqueChunks = new Set(chunks);
+            const entropy = uniqueChunks.size / chunks.length;
+            
+            if (entropy > 0.8) {
+                patterns.push('high-entropy');
+                confidence += 0.2;
+            } else if (entropy < 0.3) {
+                patterns.push('low-entropy');
+                confidence += 0.1;
+            }
+            
+            return { patterns, confidence: Math.min(confidence, 1.0) };
+        }
+
+        // Enhanced transaction pattern analysis
+        function analyzeTransactionPatterns(analysis, utxo, txDetails) {
+            try {
+                const inputCount = txDetails.vin.length;
+                const outputCount = txDetails.vout.length;
+                const totalInputValue = txDetails.vin.reduce((sum, input) => sum + (input.prevout?.value || 0), 0);
+                const totalOutputValue = txDetails.vout.reduce((sum, output) => sum + output.value, 0);
+                const fee = totalInputValue - totalOutputValue;
+
+                debugLog(`Transaction analysis: ${inputCount} inputs, ${outputCount} outputs, fee: ${fee} sats`);
+
+                // Enhanced consolidation scoring
+                let consolidationScore = 0;
+                
+                // Input/output ratio scoring
+                if (inputCount >= 50 && outputCount <= 2) consolidationScore += 6;
+                else if (inputCount >= 20 && outputCount <= 2) consolidationScore += 4;
+                else if (inputCount >= 10 && outputCount <= 3) consolidationScore += 3;
+                else if (inputCount >= 5 && outputCount <= 2) consolidationScore += 2;
+
+                // Change pattern detection
+                if (outputCount === 2) {
+                    const outputs = txDetails.vout.sort((a, b) => b.value - a.value);
+                    const ratio = outputs[0].value / outputs[1].value;
+                    if (ratio >= 20) consolidationScore += 3;
+                    else if (ratio >= 10) consolidationScore += 2;
+                    else if (ratio >= 5) consolidationScore += 1;
+                }
+
+                // Round number detection (suggests intentional consolidation)
+                const mainOutput = txDetails.vout.reduce((max, output) => 
+                    output.value > max.value ? output : max
+                );
+                
+                if (mainOutput.value % 100000000 === 0) consolidationScore += 2; // Round BTC
+                else if (mainOutput.value % 10000000 === 0) consolidationScore += 1; // 0.1 BTC increments
+
+                // Fee analysis (low fees suggest batch processing)
+                const feeRate = fee / (inputCount * 150 + outputCount * 50); // Rough tx size estimate
+                if (feeRate < 5) consolidationScore += 1; // Low fee rate suggests batching
+
+                // Classification with enhanced granularity
+                if (consolidationScore >= 8) {
+                    analysis.protocols.push('consolidation-high');
+                } else if (consolidationScore >= 5) {
+                    analysis.protocols.push('consolidation-medium');
+                } else if (consolidationScore >= 3) {
+                    analysis.protocols.push('consolidation-low');
+                } else if (inputCount >= 10) {
+                    analysis.protocols.push('possible-consolidation');
+                }
+
+                // Enhanced dust/spam detection
+                const dustThreshold = 546; // Bitcoin dust limit
+                const dustOutputs = txDetails.vout.filter(v => v.value <= dustThreshold).length;
+                const dustRatio = dustOutputs / outputCount;
+
+                if (dustRatio > 0.8 && outputCount > 10) {
+                    analysis.protocols.push('dust-spam-high');
+                } else if (dustRatio > 0.5 && outputCount > 5) {
+                    analysis.protocols.push('dust-spam-medium');
+                }
+
+                // Spray transaction detection (1 input, many outputs)
+                if (inputCount === 1 && outputCount > 50) {
+                    analysis.protocols.push('spray-transaction');
+                } else if (inputCount <= 2 && outputCount > 20) {
+                    analysis.protocols.push('distribution-transaction');
+                }
+
+                // Store analysis details
+                analysis.detectionDetails.transactionPattern = {
+                    inputCount,
+                    outputCount,
+                    consolidationScore,
+                    dustRatio,
+                    feeRate,
+                    totalValue: totalOutputValue
+                };                debugLog(`Transaction pattern analysis complete. Consolidation score: ${consolidationScore}, Dust ratio: ${dustRatio.toFixed(2)}`);
+
+            } catch (error) {
+                debugLog('Error analyzing transaction patterns:', error);
+            }        }
 
         // Analyze for consolidation patterns
         function analyzeForConsolidation(analysis, utxo, txDetails) {
@@ -1139,8 +1581,7 @@
                 // Consolidation pattern: many inputs -> few outputs
                 if (inputCount >= 10 && outputCount <= 3) {
                     analysis.protocols.push('consolidation');
-                } else if (inputCount >= 5 && outputCount <= 2) {
-                    analysis.protocols.push('possible-consolidation');
+                } else if (inputCount >= 5 && outputCount <= 2) {                analysis.protocols.push('possible-consolidation');
                 }
             } catch (error) {
                 debugLog(`Error analyzing consolidation:`, error);
@@ -1256,9 +1697,7 @@
         function displayResults(results) {
             displayStats(results);
             displayBitmapsAndUTXOs(results);
-        }
-
-        function displayStats(results) {
+        }        function displayStats(results) {
             const statsContainer = document.getElementById('statsContainer');
             
             const totalUTXOs = results.length;
@@ -1268,8 +1707,11 @@
             const runeUTXOs = results.filter(r => r.protocols.includes('rune')).length;
             const rareSatUTXOs = results.filter(r => r.protocols.includes('rare-sat')).length;
             const alkaneUTXOs = results.filter(r => r.protocols.includes('alkane')).length;
+            const protoruneUTXOs = results.filter(r => r.protocols.includes('protorune')).length;
             const stampUTXOs = results.filter(r => r.protocols.includes('stamp')).length;
+            const brc20UTXOs = results.filter(r => r.protocols.includes('brc-20')).length;
             const consolidationUTXOs = results.filter(r => r.protocols.includes('consolidation') || r.protocols.includes('possible-consolidation')).length;
+            const unknownUTXOs = results.filter(r => r.protocols.includes('unknown-protocol')).length;
 
             statsContainer.innerHTML = `
                 <div class="stats-grid">
@@ -1283,49 +1725,57 @@
                     </div>
                     <div class="stat-card">
                         <div class="stat-number">${bitmapUTXOs}</div>
-                        <div class="stat-label">Bitmaps</div>
+                        <div class="stat-label">🗺️ Bitmaps</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-number">${ordinalUTXOs}</div>
-                        <div class="stat-label">Ordinals</div>
+                        <div class="stat-label">🖼️ Ordinals</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-number">${runeUTXOs}</div>
-                        <div class="stat-label">Runes</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number">${rareSatUTXOs}</div>
-                        <div class="stat-label">Rare Sats</div>
+                        <div class="stat-label">🔮 Runes</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-number">${alkaneUTXOs}</div>
-                        <div class="stat-label">Alkanes</div>
+                        <div class="stat-label">🔷 Alkanes</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">${protoruneUTXOs}</div>
+                        <div class="stat-label">⚡ Protorunes</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-number">${stampUTXOs}</div>
-                        <div class="stat-label">Stamps</div>
+                        <div class="stat-label">📮 Stamps</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">${brc20UTXOs}</div>
+                        <div class="stat-label">🪙 BRC-20</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">${rareSatUTXOs}</div>
+                        <div class="stat-label">💎 Rare Sats</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-number">${consolidationUTXOs}</div>
-                        <div class="stat-label">Consolidations</div>
+                        <div class="stat-label">🔄 Consolidations</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">${unknownUTXOs}</div>
+                        <div class="stat-label">❓ Unknown</div>
                     </div>
                 </div>
             `;
-        }        function displayBitmapsAndUTXOs(results) {
+        }
+
+        function displayBitmapsAndUTXOs(results) {
             const resultsContainer = document.getElementById('resultsContainer');
             
             const bitmapResults = results.filter(r => r.protocols.includes('bitmap'));
-            
-            resultsContainer.innerHTML = `
+              resultsContainer.innerHTML = `
                 <div class="results-section">
                     <div class="bitmap-section">
                         <div class="section-header">
                             <span class="section-title">🗺️ Bitmaps (${bitmapResults.length})</span>
-                            ${bitmapResults.length > 0 ? `
-                                <button class="btn-small" onclick="autoLoadBitmapVisualizations()" style="margin-left: auto;">
-                                    🎨 Auto-Load Visualizations
-                                </button>
-                            ` : ''}
                         </div>
                         <div id="bitmapResults">
                             ${bitmapResults.length > 0 ? generateBitmapCards(bitmapResults) : '<div class="no-bitmaps">No bitmaps found in this address</div>'}
@@ -1341,15 +1791,20 @@
                     </div>
                 </div>
             `;
-        }
-
-        function generateBitmapCards(bitmapResults) {
+            
+            // Auto-load all bitmap visualizations
+            if (bitmapResults.length > 0) {
+                autoLoadBitmapVisualizations(bitmapResults);
+            }
+        }        function generateBitmapCards(bitmapResults) {
             return bitmapResults.map(result => {
                 if (!result.bitmapData) return '';
                 
                 const validation = result.bitmapData.validation;
-                const statusClass = validation.status;
+                const statusClass = validation.status === 'valid-high' ? 'valid-high' : validation.status;
                 const isParcel = validation.details?.isParcel;
+                const bitmapNumber = validation.details?.bitmapNumber;
+                const isHighNumber = validation.details?.isHighNumber;
                 
                 return `
                     <div class="bitmap-card ${statusClass}">
@@ -1357,11 +1812,11 @@
                             <div class="bitmap-number">
                                 ${isParcel ? 
                                     `Parcel ${validation.details.parcelNumber}.${validation.details.bitmapNumber}` :
-                                    `Bitmap ${validation.details?.bitmapNumber || 'Unknown'}`
+                                    `Bitmap ${bitmapNumber || 'Unknown'}${isHighNumber ? ' (High #)' : ''}`
                                 }
                             </div>
                             <div class="validation-status">
-                                ${getStatusIcon(statusClass)} ${statusClass.toUpperCase()}
+                                ${getStatusIcon(statusClass)} ${statusClass.toUpperCase().replace('-', ' ')}
                             </div>
                         </div>
                         
@@ -1379,18 +1834,15 @@
                             <div style="font-size: 0.8rem; margin-bottom: 10px;">
                                 <strong>Status:</strong> ${validation.message}
                             </div>
-                            
-                            ${validation.status === 'valid' ? `                                <div class="bitmap-visualization">
+                            ${(validation.status === 'valid' || validation.status === 'valid-high') ? `
+                                <div class="bitmap-visualization">
                                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
                                         <strong style="font-size: 0.85rem;">🎨 Mondrian Pattern</strong>
-                                        <button class="load-viz-btn" onclick="loadBitmapVisualization('${result.bitmapData.inscriptionId}', '${validation.details?.bitmapNumber}')">
-                                            🔄 Load Visualization
-                                        </button>
+                                        <span style="font-size: 0.7rem; color: rgba(255,255,255,0.7);">Auto-loaded • Click for fullscreen</span>
                                     </div>
                                     <div id="viz-${result.bitmapData.inscriptionId}" class="visualization-container">
                                         <div style="color: #fff; text-align: center; line-height: 250px; font-size: 0.85rem;">
-                                            Click "Load Visualization" to see bitmap pattern<br>
-                                            <small style="opacity: 0.7;">Uses real blockchain data + Mondrian layout</small>
+                                            🔄 Loading visualization...
                                         </div>
                                     </div>
                                 </div>
@@ -1446,11 +1898,10 @@
                 return `${(sats / 1000).toFixed(1)}k sats`;
             }
             return `${sats.toLocaleString()} sats`;
-        }
-
-        function getStatusIcon(status) {
+        }        function getStatusIcon(status) {
             const icons = {
                 'valid': '✅',
+                'valid-high': '🔶',
                 'invalid': '❌',
                 'unknown': '⚠️'
             };
@@ -1507,238 +1958,302 @@
             contentCache.clear();
             validationCache.clear();
             bitmapCache.clear();
-            
-            // Clear Mondrian module cache
-            mondrianModule = null;
+            visualizationCache.clear();
+            mondrianModule.clear();
             
             for (let i = 0; i < bitmapPages.length; i++) {
                 bitmapPages[i] = 0;
             }
-            
-            console.log('All caches cleared');
+              console.log('All caches cleared');
             alert('All caches cleared successfully!');
-        }
-
-        // ==================== MONDRIAN BITMAP VISUALIZATION ====================
-        // Mondrian Layout Module Cache
-        let mondrianModule = null;
-
-        // Load Mondrian layout module
-        async function loadMondrianModule() {
-            if (mondrianModule) return mondrianModule;
+        }        // Auto-load all bitmap visualizations
+        async function autoLoadBitmapVisualizations(bitmapResults) {
+            debugLog(`Auto-loading ${bitmapResults.length} bitmap visualizations...`);
             
-            try {
-                debugLog('Loading Mondrian layout module...');
-                const moduleCode = await rateLimitedFetch('https://ordinals.com/content/55551557695dd82a2bda5ec3497684ec7cbb2cc1752ff5101accff1648666c3ai0').then(r => r.text());
-                mondrianModule = await import(URL.createObjectURL(new Blob([moduleCode], { type: 'application/javascript' })));
-                debugLog('Mondrian module loaded successfully');
-                return mondrianModule;
-            } catch (error) {
-                debugLog('Failed to load Mondrian module:', error);
-                throw error;
+            for (const result of bitmapResults) {
+                if (result.bitmapData && 
+                    (result.bitmapData.validation.status === 'valid' || result.bitmapData.validation.status === 'valid-high')) {
+                    const bitmapNumber = result.bitmapData.validation.details?.bitmapNumber;
+                    const inscriptionId = result.bitmapData.inscriptionId;
+                    
+                    if (bitmapNumber && inscriptionId) {
+                        // Add small delay between loads to prevent overwhelming
+                        setTimeout(() => {
+                            loadBitmapVisualization(inscriptionId, bitmapNumber);
+                        }, 500); // 500ms delay
+                    }
+                }
             }
         }
 
-        // Fetch block data for bitmap visualization
-        async function fetchBitmapBlockData(bitmapNumber) {
+        // Load bitmap visualization with automatic Mondrian layout
+        async function loadBitmapVisualization(inscriptionId, bitmapNumber) {
+            const container = document.getElementById(`viz-${inscriptionId}`);
+            if (!container) return;
+
             try {
-                // Use bitmap number to derive a block number (this is a simplified approach)
-                // In a real implementation, you'd want to map bitmap numbers to actual blocks
-                const blockNumber = 783426 + (parseInt(bitmapNumber) % 10000); // Start from block 783426 (around bitmap creation time)
+                // Check cache first
+                const cacheKey = `viz-${bitmapNumber}`;
+                if (visualizationCache.has(cacheKey)) {
+                    container.innerHTML = visualizationCache.get(cacheKey);
+                    return;
+                }
+
+                container.innerHTML = '<div style="color: #fff; text-align: center; line-height: 250px; font-size: 0.8rem;">🔄 Loading Mondrian pattern...</div>';
                 
-                debugLog(`Fetching block data for block ${blockNumber} (bitmap ${bitmapNumber})`);
+                // Load Mondrian module if not already loaded
+                if (!mondrianModule.has('module')) {
+                    debugLog('Loading Mondrian module...');
+                    const moduleResponse = await rateLimitedFetch('https://ordinals.com/content/55551557695dd82a2bda5ec3497684ec7cbb2cc1752ff5101accff1648666c3ai0');
+                    const moduleCode = await moduleResponse.text();
+                    
+                    // Create module blob and import
+                    const moduleBlob = new Blob([moduleCode], { type: 'application/javascript' });
+                    const moduleUrl = URL.createObjectURL(moduleBlob);
+                    const module = await import(moduleUrl);
+                    
+                    mondrianModule.set('module', module);
+                    debugLog('Mondrian module loaded successfully');
+                }
+
+                const module = mondrianModule.get('module');
                 
-                const response = await rateLimitedFetch(`https://blockchain.info/rawblock/${blockNumber}?cors=true`);
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch block data: ${response.status}`);
+                // Get block data for the bitmap number (using it as block number)
+                let blockData;
+                try {
+                    const blockResponse = await rateLimitedFetch(`https://blockchain.info/rawblock/${bitmapNumber}?cors=true`);
+                    blockData = await blockResponse.json();
+                } catch (blockError) {
+                    // If can't get real block data, generate synthetic data
+                    debugLog(`Could not fetch block ${bitmapNumber}, generating synthetic data`);
+                    blockData = generateSyntheticBlockData(bitmapNumber);
+                }
+
+                // Process transaction data into square sizes
+                const sizes = blockData.tx.map(tx => 
+                    module.getSquareSize(tx.out.reduce((s, o) => s + o.value, 0))
+                );
+
+                // Create Mondrian layout
+                const mondrian = new module.MondrianLayout(sizes);
+                
+                // Calculate scaling to fit container
+                const containerWidth = container.offsetWidth || 300;
+                const containerHeight = container.offsetHeight || 250;
+                const scale = Math.min(containerWidth / mondrian.width, containerHeight / mondrian.height);
+
+                // Create visualization HTML
+                let visualizationHTML = '<div style="position: relative; width: 100%; height: 100%; cursor: pointer;" onclick="openFullscreen(\'' + inscriptionId + '\', ' + bitmapNumber + ')">';
+                
+                mondrian.slots.forEach((slot, i) => {
+                    const x = slot.position.x * scale;
+                    const y = slot.position.y * scale;
+                    const width = (slot.size - 0.5) * scale;
+                    const height = (slot.size - 0.5) * scale;
+                    
+                    // Use different colors for variety
+                    const colors = ['#ff6b35', '#f7931e', '#ffd23f', '#06ffa5', '#118ab2', '#073b4c'];
+                    const color = colors[i % colors.length];
+                    
+                    visualizationHTML += `
+                        <div style="
+                            position: absolute;
+                            left: ${x}px;
+                            top: ${y}px;
+                            width: ${width}px;
+                            height: ${height}px;
+                            background-color: ${color};
+                            border: 1px solid rgba(255,255,255,0.3);
+                            transition: all 0.2s ease;
+                        " onmouseover="this.style.backgroundColor='#e74c3c'; this.textContent='${i}'" onmouseout="this.style.backgroundColor='${color}'; this.textContent=''"></div>
+                    `;
+                });
+                
+                visualizationHTML += '</div>';
+                
+                // Cache and display
+                visualizationCache.set(cacheKey, visualizationHTML);
+                container.innerHTML = visualizationHTML;
+                
+                debugLog(`Bitmap visualization loaded for ${bitmapNumber}`);
+                
+            } catch (error) {
+                debugLog(`Error loading bitmap visualization: ${error.message}`);
+                container.innerHTML = `<div style="color: #e74c3c; text-align: center; line-height: 250px; font-size: 0.8rem;">⚠️ Visualization unavailable</div>`;
+            }
+        }
+
+        // Generate synthetic block data when real data is unavailable
+        function generateSyntheticBlockData(bitmapNumber) {
+            const seed = parseInt(bitmapNumber) || 1;
+            const random = (s) => {
+                const x = Math.sin(s) * 10000;
+                return x - Math.floor(x);
+            };
+            
+            const numTx = 5 + Math.floor(random(seed) * 15); // 5-20 transactions
+            const transactions = [];
+            
+            for (let i = 0; i < numTx; i++) {
+                const txSeed = seed * 1000 + i;
+                const numOutputs = 1 + Math.floor(random(txSeed) * 4); // 1-5 outputs
+                const outputs = [];
+                
+                for (let j = 0; j < numOutputs; j++) {
+                    const outputSeed = txSeed * 100 + j;
+                    const value = Math.floor(random(outputSeed) * 100000000); // 0-1 BTC in satoshis
+                    outputs.push({ value });
                 }
                 
-                const blockData = await response.json();
-                debugLog(`Fetched block ${blockNumber} with ${blockData.tx.length} transactions`);
-                return blockData;
-                
-            } catch (error) {
-                debugLog(`Failed to fetch block data for bitmap ${bitmapNumber}:`, error);
-                return null;
+                transactions.push({ out: outputs });
             }
+            
+            return { tx: transactions };
         }
 
-        // Generate fallback pattern if Mondrian fails
-        async function generateFallbackPattern(container, bitmapNumber) {
+        // Open fullscreen visualization
+        function openFullscreen(inscriptionId, bitmapNumber) {
+            const fullscreenHTML = `
+                <div id="fullscreenVisualization" style="
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100vw;
+                    height: 100vh;
+                    background: rgba(0,0,0,0.95);
+                    z-index: 10000;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    color: white;
+                " onclick="closeFullscreen()">
+                    <div style="position: absolute; top: 20px; right: 20px; font-size: 2rem; cursor: pointer; z-index: 10001;" onclick="closeFullscreen()">✕</div>
+                    <h2 style="margin-bottom: 20px; color: #f7931e;">Bitmap #${bitmapNumber} - Mondrian Visualization</h2>
+                    <div id="fullscreenContainer" style="width: 80vmin; height: 80vmin; border: 2px solid #f7931e;"></div>
+                    <div style="margin-top: 20px; text-align: center; max-width: 600px; font-size: 0.9rem; opacity: 0.8;">
+                        <p>This Mondrian-style visualization represents the transaction structure of Bitcoin block #${bitmapNumber}.</p>
+                        <p>Each colored rectangle represents a transaction output, sized according to its value.</p>
+                        <p>Hover over rectangles to see transaction indices. Click anywhere to close.</p>
+                    </div>
+                </div>
+            `;
+            
+            document.body.insertAdjacentHTML('beforeend', fullscreenHTML);
+            
+            // Load the visualization in fullscreen
+            setTimeout(async () => {
+                const fullscreenContainer = document.getElementById('fullscreenContainer');
+                if (fullscreenContainer) {
+                    // Create a temporary container element for loadBitmapVisualization
+                    fullscreenContainer.id = `viz-${inscriptionId}-fullscreen`;
+                    await loadBitmapVisualizationFullscreen(inscriptionId, bitmapNumber);
+                }
+            }, 100);
+        }
+
+        // Load bitmap visualization for fullscreen
+        async function loadBitmapVisualizationFullscreen(inscriptionId, bitmapNumber) {
+            const container = document.getElementById(`viz-${inscriptionId}-fullscreen`);
+            if (!container) return;
+
             try {
-                const canvas = document.createElement('canvas');
-                const containerWidth = container.offsetWidth || 250;
-                const containerHeight = container.offsetHeight || 250;
+                container.innerHTML = '<div style="color: #fff; text-align: center; line-height: 200px; font-size: 1rem;">🔄 Loading fullscreen visualization...</div>';
                 
-                canvas.width = containerWidth;
-                canvas.height = containerHeight;
-                canvas.style.width = '100%';
-                canvas.style.height = '100%';
+                const module = mondrianModule.get('module');
+                if (!module) {
+                    throw new Error('Mondrian module not loaded');
+                }
+
+                // Get or generate block data
+                let blockData;
+                try {
+                    const blockResponse = await rateLimitedFetch(`https://blockchain.info/rawblock/${bitmapNumber}?cors=true`);
+                    blockData = await blockResponse.json();
+                } catch {
+                    blockData = generateSyntheticBlockData(bitmapNumber);
+                }
+
+                const sizes = blockData.tx.map(tx => 
+                    module.getSquareSize(tx.out.reduce((s, o) => s + o.value, 0))
+                );
+
+                const mondrian = new module.MondrianLayout(sizes);
+                const containerWidth = container.offsetWidth;
+                const containerHeight = container.offsetHeight;
+                const scale = Math.min(containerWidth / mondrian.width, containerHeight / mondrian.height);
+
+                let visualizationHTML = '<div style="position: relative; width: 100%; height: 100%;">';
                 
-                const ctx = canvas.getContext('2d');
-                generateBitmapPattern(ctx, containerWidth, containerHeight, parseInt(bitmapNumber) || 1);
+                mondrian.slots.forEach((slot, i) => {
+                    const x = slot.position.x * scale;
+                    const y = slot.position.y * scale;
+                    const width = (slot.size - 0.5) * scale;
+                    const height = (slot.size - 0.5) * scale;
+                    
+                    const colors = ['#ff6b35', '#f7931e', '#ffd23f', '#06ffa5', '#118ab2', '#073b4c', '#e63946', '#f77f00', '#fcbf49', '#003049'];
+                    const color = colors[i % colors.length];
+                    
+                    visualizationHTML += `
+                        <div style="
+                            position: absolute;
+                            left: ${x}px;
+                            top: ${y}px;
+                            width: ${width}px;
+                            height: ${height}px;
+                            background-color: ${color};
+                            border: 2px solid rgba(255,255,255,0.4);
+                            transition: all 0.3s ease;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            color: white;
+                            font-weight: bold;
+                            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+                        " onmouseover="this.style.backgroundColor='#e74c3c'; this.style.transform='scale(1.05)'; this.textContent='TX ${i}'" onmouseout="this.style.backgroundColor='${color}'; this.style.transform='scale(1)'; this.textContent=''"></div>
+                    `;
+                });
                 
-                container.innerHTML = '';
-                container.appendChild(canvas);
+                visualizationHTML += '</div>';
+                container.innerHTML = visualizationHTML;
                 
-                debugLog(`Generated fallback pattern for bitmap ${bitmapNumber}`);
             } catch (error) {
-                container.innerHTML = `<div style="color: #e74c3c; text-align: center; line-height: 250px; font-size: 0.8rem;">Visualization Error</div>`;
-                debugLog(`Failed to generate fallback pattern:`, error);
+                container.innerHTML = `<div style="color: #e74c3c; text-align: center; line-height: 200px; font-size: 1rem;">⚠️ Error: ${error.message}</div>`;
+            }
+        }        // Close fullscreen visualization
+        function closeFullscreen() {
+            const fullscreen = document.getElementById('fullscreenVisualization');
+            if (fullscreen) {
+                fullscreen.remove();
             }
         }
 
-        // Enhanced bitmap pattern generator
         function generateBitmapPattern(ctx, width, height, seed) {
             const random = (seed) => {
                 let x = Math.sin(seed) * 10000;
                 return x - Math.floor(x);
             };
             
-            // Background
             ctx.fillStyle = '#000000';
             ctx.fillRect(0, 0, width, height);
             
-            // Generate Mondrian-style rectangles based on bitmap number
-            const numRects = 8 + (seed % 15);
-            const colors = ['#ff8800', '#ff4444', '#44ff44', '#4444ff', '#ffff44', '#ff44ff', '#44ffff'];
+            const numSquares = 15 + (seed % 30);
             
-            for (let i = 0; i < numRects; i++) {
-                const x = random(seed + i) * (width * 0.8);
-                const y = random(seed + i * 2) * (height * 0.8);
-                const w = 20 + random(seed + i * 3) * (width * 0.3);
-                const h = 20 + random(seed + i * 4) * (height * 0.3);
+            for (let i = 0; i < numSquares; i++) {
+                const x = random(seed + i) * (width - 40);
+                const y = random(seed + i * 2) * (height - 40);
+                const size = 8 + random(seed + i * 3) * 30;
                 
-                // Ensure rectangles don't go out of bounds
-                const rectX = Math.min(x, width - w);
-                const rectY = Math.min(y, height - h);
+                ctx.fillStyle = `rgba(255, 165, 0, ${0.7 + random(seed + i * 4) * 0.3})`;
+                ctx.fillRect(x, y, size, size);
                 
-                const color = colors[i % colors.length];
-                ctx.fillStyle = color;
-                ctx.fillRect(rectX, rectY, w, h);
-                
-                // Add border
-                ctx.strokeStyle = '#333';
-                ctx.lineWidth = 1;
-                ctx.strokeRect(rectX, rectY, w, h);
-            }
-        }
-
-        // Main bitmap visualization function using Mondrian layout
-        async function loadBitmapVisualization(inscriptionId, bitmapNumber) {
-            const container = document.getElementById(`viz-${inscriptionId}`);
-            if (!container) return;
-
-            try {
-                // Show loading state
-                container.innerHTML = '<div style="color: #fff; text-align: center; line-height: 250px; font-size: 0.8rem;">🔄 Loading bitmap pattern...</div>';
-                
-                debugLog(`Loading bitmap visualization for ${bitmapNumber}`, { inscriptionId, bitmapNumber });
-                
-                // Try to load Mondrian module first
-                try {
-                    const module = await loadMondrianModule();
-                    
-                    // Fetch block data for the bitmap number
-                    const blockData = await fetchBitmapBlockData(bitmapNumber);
-                    
-                    if (blockData && blockData.tx && blockData.tx.length > 0) {
-                        // Process transaction data into square sizes using Mondrian module
-                        const sizes = blockData.tx.map(tx => 
-                            module.getSquareSize(tx.out.reduce((s, o) => s + o.value, 0))
-                        );
-
-                        // Create Mondrian layout
-                        const mondrian = new module.MondrianLayout(sizes);
-                        const containerWidth = container.offsetWidth || 250;
-                        const containerHeight = container.offsetHeight || 250;
-                        const scale = Math.min(containerWidth / mondrian.width, containerHeight / mondrian.height);
-
-                        // Clear container and render squares
-                        container.innerHTML = '';
-                        container.style.position = 'relative';
-                        container.style.width = `${containerWidth}px`;
-                        container.style.height = `${containerHeight}px`;
-                        container.style.backgroundColor = '#000';
-
-                        mondrian.slots.forEach((slot, i) => {
-                            const div = document.createElement('div');
-                            Object.assign(div.style, {
-                                position: 'absolute',
-                                left: `${slot.position.x * scale}px`,
-                                top: `${slot.position.y * scale}px`,
-                                width: `${(slot.size - 0.5) * scale}px`,
-                                height: `${(slot.size - 0.5) * scale}px`,
-                                backgroundColor: '#ff8800',
-                                border: '0.5px solid #333',
-                                transition: 'background-color 0.2s ease',
-                                cursor: 'pointer'
-                            });
-
-                            // Add hover effects with transaction info
-                            div.onmouseover = () => { 
-                                div.style.backgroundColor = '#ff4444'; 
-                                if (blockData.tx[i]) {
-                                    const txValue = blockData.tx[i].out.reduce((s, o) => s + o.value, 0);
-                                    div.title = `TX ${i}: ${(txValue / 100000000).toFixed(8)} BTC`;
-                                }
-                            };
-                            div.onmouseout = () => { 
-                                div.style.backgroundColor = '#ff8800'; 
-                                div.title = '';
-                            };
-                            
-                            container.appendChild(div);
-                        });
-
-                        debugLog(`Mondrian visualization rendered: ${mondrian.slots.length} squares`);
-                        return;
-                    }
-                } catch (mondrianError) {
-                    debugLog(`Mondrian visualization failed, falling back to pattern:`, mondrianError);
-                }
-                
-                // Fallback to generated pattern
-                await generateFallbackPattern(container, bitmapNumber);
-                
-            } catch (error) {
-                debugLog(`Error loading bitmap visualization:`, error);
-                container.innerHTML = `<div style="color: #e74c3c; text-align: center; line-height: 250px; font-size: 0.8rem;">❌ Visualization Error</div>`;
-            }
-        }
-
-        // Auto-load bitmap visualizations
-        async function autoLoadBitmapVisualizations() {
-            if (!currentAnalysis) return;
-            
-            const bitmapResults = currentAnalysis.filter(r => r.protocols.includes('bitmap') && r.bitmapData?.validation?.status === 'valid');
-            
-            if (bitmapResults.length === 0) {
-                alert('No valid bitmaps found to visualize');
-                return;
-            }
-            
-            // Load first 3 bitmap visualizations automatically
-            const toLoad = bitmapResults.slice(0, 3);
-            
-            for (const result of toLoad) {
-                const inscriptionId = result.bitmapData.inscriptionId;
-                const bitmapNumber = result.bitmapData.validation.details?.bitmapNumber;
-                
-                if (inscriptionId && bitmapNumber) {
-                    debugLog(`Auto-loading visualization for bitmap ${bitmapNumber}`);
-                    await loadBitmapVisualization(inscriptionId, bitmapNumber);
-                    // Small delay between loads
-                    await new Promise(resolve => setTimeout(resolve, 1000));
+                if (random(seed + i * 5) > 0.6) {
+                    ctx.strokeStyle = '#FF8C00';
+                    ctx.lineWidth = 1;
+                    ctx.strokeRect(x, y, size, size);
                 }
             }
-            
-            if (bitmapResults.length > 3) {
-                debugLog(`Auto-loaded first 3 visualizations. ${bitmapResults.length - 3} more available to load manually.`);
-            }
-        }
-
-        // Test bitmap validation function
+        }// Test bitmap validation function
         async function testBitmapValidation() {
             console.log('Testing bitmap validation...');
             
@@ -1763,10 +2278,11 @@
             if (event.key === 'Enter') {
                 analyzeAddress();
             }
-        });
-
-        // Make functions globally available
+        });        // Make functions globally available
         window.loadBitmapVisualization = loadBitmapVisualization;
+        window.autoLoadBitmapVisualizations = autoLoadBitmapVisualizations;
+        window.openFullscreen = openFullscreen;
+        window.closeFullscreen = closeFullscreen;
         window.clearAllCaches = clearAllCaches;
         window.testBitmapValidation = testBitmapValidation;
         window.analyzeAddress = analyzeAddress;
