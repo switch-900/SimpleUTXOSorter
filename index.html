@@ -13,9 +13,9 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #2d1b69 0%, #11081f 50%, #0a0612 100%);
             min-height: 100vh;
-            color: #333;
+            color: #e8e4f3;
         }
 
         .container {
@@ -27,30 +27,36 @@
         .header {
             text-align: center;
             margin-bottom: 30px;
-            color: white;
+            color: #f0ebff;
         }
 
         .header h1 {
             font-size: 2.8rem;
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 2px 2px 8px rgba(138, 43, 226, 0.4);
+            background: linear-gradient(135deg, #e1b3ff, #c77dff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .feature-highlight {
-            background: rgba(255,255,255,0.15);
+            background: rgba(138, 43, 226, 0.15);
             padding: 20px;
             border-radius: 15px;
             margin-top: 15px;
             font-size: 0.95rem;
             backdrop-filter: blur(10px);
+            border: 1px solid rgba(138, 43, 226, 0.3);
         }
 
         .input-section {
-            background: white;
+            background: rgba(30, 16, 50, 0.95);
             border-radius: 20px;
             padding: 30px;
             margin-bottom: 30px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+            box-shadow: 0 15px 40px rgba(138, 43, 226, 0.2);
+            border: 1px solid rgba(138, 43, 226, 0.2);
         }
 
         .input-group {
@@ -62,21 +68,28 @@
         .input-group input {
             flex: 1;
             padding: 18px;
-            border: 2px solid #e0e0e0;
+            border: 2px solid rgba(138, 43, 226, 0.3);
             border-radius: 12px;
             font-size: 16px;
             transition: all 0.3s ease;
             font-family: 'Courier New', monospace;
+            background: rgba(20, 10, 35, 0.8);
+            color: #e8e4f3;
         }
 
         .input-group input:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: #c77dff;
+            box-shadow: 0 0 0 3px rgba(199, 125, 255, 0.2);
+            background: rgba(30, 16, 50, 0.9);
+        }
+
+        .input-group input::placeholder {
+            color: rgba(232, 228, 243, 0.6);
         }
 
         .analyze-btn {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #8a2be2, #6a1b9a);
             color: white;
             border: none;
             padding: 18px 35px;
@@ -86,15 +99,17 @@
             cursor: pointer;
             transition: all 0.3s ease;
             min-width: 150px;
+            box-shadow: 0 4px 15px rgba(138, 43, 226, 0.3);
         }
 
         .analyze-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 8px 25px rgba(138, 43, 226, 0.4);
+            background: linear-gradient(135deg, #9d3bf0, #7c1fa7);
         }
 
         .analyze-btn:disabled {
-            background: #ccc;
+            background: #4a4a4a;
             cursor: not-allowed;
             transform: none;
             box-shadow: none;
@@ -103,16 +118,17 @@
         .loading {
             text-align: center;
             padding: 30px;
-            color: #666;
-            background: white;
+            color: #c77dff;
+            background: rgba(30, 16, 50, 0.95);
             border-radius: 15px;
             margin-bottom: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 30px rgba(138, 43, 226, 0.2);
+            border: 1px solid rgba(138, 43, 226, 0.2);
         }
 
         .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #667eea;
+            border: 4px solid rgba(138, 43, 226, 0.3);
+            border-top: 4px solid #c77dff;
             border-radius: 50%;
             width: 50px;
             height: 50px;
@@ -126,7 +142,7 @@
         }
 
         .progress-bar {
-            background: #f0f0f0;
+            background: rgba(138, 43, 226, 0.2);
             border-radius: 10px;
             overflow: hidden;
             margin: 15px 0;
@@ -134,7 +150,7 @@
         }
 
         .progress-fill {
-            background: linear-gradient(90deg, #667eea, #764ba2);
+            background: linear-gradient(90deg, #8a2be2, #c77dff);
             height: 100%;
             border-radius: 10px;
             transition: width 0.3s ease;
@@ -148,27 +164,29 @@
         }
 
         .stat-card {
-            background: white;
+            background: rgba(30, 16, 50, 0.95);
             padding: 20px;
             border-radius: 15px;
             text-align: center;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 25px rgba(138, 43, 226, 0.15);
             transition: transform 0.3s ease;
+            border: 1px solid rgba(138, 43, 226, 0.2);
         }
 
         .stat-card:hover {
             transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(138, 43, 226, 0.25);
         }
 
         .stat-number {
             font-size: 1.8rem;
             font-weight: bold;
-            color: #667eea;
+            color: #c77dff;
             margin-bottom: 5px;
         }
 
         .stat-label {
-            color: #666;
+            color: #b8a7d1;
             font-size: 0.85rem;
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -181,10 +199,11 @@
         }
 
         .bitmap-section, .utxo-section {
-            background: white;
+            background: rgba(30, 16, 50, 0.95);
             border-radius: 20px;
             padding: 30px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+            box-shadow: 0 15px 40px rgba(138, 43, 226, 0.2);
+            border: 1px solid rgba(138, 43, 226, 0.2);
         }
 
         .section-header {
@@ -193,43 +212,47 @@
             gap: 10px;
             margin-bottom: 25px;
             padding-bottom: 15px;
-            border-bottom: 2px solid #f0f0f0;
+            border-bottom: 2px solid rgba(138, 43, 226, 0.3);
         }
 
         .section-title {
             font-size: 1.4rem;
             font-weight: bold;
-            color: #333;
+            color: #e8e4f3;
         }
 
         .bitmap-card {
-            border: 2px solid #e0e0e0;
+            border: 2px solid rgba(138, 43, 226, 0.3);
             border-radius: 15px;
             padding: 20px;
             margin-bottom: 20px;
             transition: all 0.3s ease;
+            background: rgba(20, 10, 35, 0.8);
         }
 
         .bitmap-card:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            box-shadow: 0 8px 25px rgba(138, 43, 226, 0.25);
         }
 
         .bitmap-card.valid {
-            border-color: #00b894;
-            background: linear-gradient(135deg, #00b894, #00a085);
+            border-color: #00c851;
+            background: linear-gradient(135deg, rgba(0, 200, 81, 0.2), rgba(0, 170, 68, 0.2));
+            box-shadow: 0 4px 15px rgba(0, 200, 81, 0.2);
             color: white;
         }
 
         .bitmap-card.invalid {
-            border-color: #e74c3c;
-            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            border-color: #ff3547;
+            background: linear-gradient(135deg, rgba(255, 53, 71, 0.2), rgba(204, 41, 54, 0.2));
+            box-shadow: 0 4px 15px rgba(255, 53, 71, 0.2);
             color: white;
         }
 
         .bitmap-card.valid-high {
-            border-color: #f39c12;
-            background: linear-gradient(135deg, #f39c12, #e67e22);
+            border-color: #ff9500;
+            background: linear-gradient(135deg, rgba(255, 149, 0, 0.2), rgba(230, 126, 34, 0.2));
+            box-shadow: 0 4px 15px rgba(255, 149, 0, 0.2);
             color: white;
         }
 
@@ -243,6 +266,7 @@
         .bitmap-number {
             font-size: 1.6rem;
             font-weight: bold;
+            color: #e8e4f3;
         }
 
         .validation-status {
@@ -264,15 +288,16 @@
         .bitmap-visualization {
             margin-top: 20px;
             padding: 20px;
-            background: rgba(0,0,0,0.1);
+            background: rgba(0, 0, 0, 0.3);
             border-radius: 10px;
+            border: 1px solid rgba(138, 43, 226, 0.2);
         }
 
         .visualization-container {
             position: relative;
             width: 100%;
             height: 250px;
-            border: 2px solid rgba(255,255,255,0.3);
+            border: 2px solid rgba(138, 43, 226, 0.4);
             border-radius: 10px;
             overflow: hidden;
             background: #000;
@@ -302,30 +327,31 @@
         }
 
         .utxo-table th {
-            background: #f8f9fa;
+            background: rgba(138, 43, 226, 0.2);
             padding: 10px 8px;
             text-align: left;
-            border-bottom: 2px solid #dee2e6;
+            border-bottom: 2px solid rgba(138, 43, 226, 0.3);
             font-weight: bold;
             font-size: 0.8rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            color: #e8e4f3;
         }
 
         .utxo-table td {
             padding: 8px;
-            border-bottom: 1px solid #dee2e6;
+            border-bottom: 1px solid rgba(138, 43, 226, 0.2);
             vertical-align: top;
         }
 
         .utxo-table tr:hover {
-            background: #f8f9fa;
+            background: rgba(138, 43, 226, 0.1);
         }
 
         .utxo-id {
             font-family: 'Courier New', monospace;
             font-size: 0.75rem;
-            color: #666;
+            color: #b8a7d1;
             max-width: 120px;
             word-break: break-all;
         }
@@ -346,16 +372,16 @@
         }
 
         .tag-ordinal { background: #ff9f43; color: white; }
-        .tag-rune { background: #5f27cd; color: white; }
-        .tag-bitmap { background: #00b894; color: white; }
+        .tag-rune { background: #8a2be2; color: white; }
+        .tag-bitmap { background: #c77dff; color: white; }
         .tag-rare-sat { background: #fd79a8; color: white; }
         .tag-alkane { background: #00cec9; color: white; }
-        .tag-protorune { background: #00d2d3; color: white; }
+        .tag-protorune { background: #6c5ce7; color: white; }
         .tag-stamp { background: #a29bfe; color: white; }
-        .tag-consolidation { background: #00b894; color: white; }
+        .tag-consolidation { background: #00c851; color: white; }
         .tag-possible-consolidation { background: #81ecec; color: #2d3436; }
-        .tag-cardinal { background: #ddd; color: #666; }
-        .tag-error { background: #e74c3c; color: white; }
+        .tag-cardinal { background: #666; color: white; }
+        .tag-error { background: #ff3547; color: white; }
         .tag-potential-ordinal { background: #ffeaa7; color: #2d3436; }
         .tag-structured-data { background: #6c5ce7; color: white; }
         .tag-multisig-data { background: #fd79a8; color: white; }
@@ -363,23 +389,24 @@
 
         .value-display {
             font-weight: bold;
-            color: #667eea;
+            color: #c77dff;
             font-size: 0.85rem;
         }
 
         .error-message {
-            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            background: linear-gradient(135deg, rgba(255, 53, 71, 0.9), rgba(204, 41, 54, 0.9));
             color: white;
             padding: 20px;
             border-radius: 15px;
             margin: 20px 0;
             font-weight: bold;
+            border: 1px solid rgba(255, 53, 71, 0.5);
         }
 
         .no-bitmaps {
             text-align: center;
             padding: 40px;
-            color: #666;
+            color: #b8a7d1;
             font-style: italic;
         }
 
@@ -415,42 +442,27 @@
             align-items: center;
             gap: 5px;
             font-size: 0.85rem;
+            color: #e8e4f3;
+        }
+
+        .control-item input[type="checkbox"] {
+            accent-color: #8a2be2;
         }
 
         .btn-small {
             padding: 5px 10px;
             font-size: 0.75rem;
-            border: 1px solid #ccc;
+            border: 1px solid rgba(138, 43, 226, 0.5);
             border-radius: 5px;
-            background: #f8f8f8;
+            background: rgba(138, 43, 226, 0.2);
+            color: #e8e4f3;
             cursor: pointer;
-            transition: background 0.3s ease;
+            transition: all 0.3s ease;
         }
 
         .btn-small:hover {
-            background: #e8e8e8;
+            background: rgba(138, 43, 226, 0.4);
         }
-
-        .system-status {
-            background: rgba(255,255,255,0.1);
-            padding: 10px;
-            border-radius: 8px;
-            margin-top: 10px;
-            font-size: 0.8rem;
-            color: rgba(255,255,255,0.9);
-        }
-
-        .status-indicator {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            margin-right: 5px;
-        }
-
-        .status-online { background: #00b894; }
-        .status-offline { background: #e74c3c; }
-        .status-loading { background: #f39c12; }
 
         @media (max-width: 1200px) {
             .results-section {
@@ -490,15 +502,12 @@
     <div class="container">
         <div class="header">
             <h1>🗺️ Bitcoin Bitmap & UTXO Protocol Analyzer</h1>
-            <p>Enhanced with advanced import management and persistent data storage</p>
+            <p>Comprehensive bitmap validation (0-839,999+) with full protocol detection</p>
             <div class="feature-highlight">
-                <strong>🚀 Enhanced Features:</strong> Smart caching • Persistent storage • Import optimization • Redundancy prevention<br>
+                <strong>🚀 Dual Analysis:</strong> ordinals.com confirmed data + raw transaction parsing for complete coverage<br>
                 <strong>🗺️ Bitmap Features:</strong> Full OCI validation • Parcel tie-breaking • Reinscription handling • Pattern visualization<br>
                 <strong>🔍 Protocol Detection:</strong> Ordinals, Runes, Alkanes, Protorunes, Stamps, Bitmaps, Rare Sats, Consolidations, Unknown protocols<br>
                 <strong>⚠️ CORS:</strong> Enable CORS extension for full functionality
-                <div class="system-status" id="systemStatus">
-                    <span class="status-indicator status-loading"></span> Initializing systems...
-                </div>
             </div>
         </div>
 
@@ -523,14 +532,8 @@
                 <label class="control-item">
                     <input type="checkbox" id="limitUTXOs"> Test Mode (5 UTXOs)
                 </label>
-                <label class="control-item">
-                    <input type="checkbox" id="persistentMode" checked> Persistent Storage
-                </label>
                 <button onclick="clearAllCaches()" class="btn-small">Clear Cache</button>
-                <button onclick="exportData()" class="btn-small">Export Data</button>
-                <button onclick="importData()" class="btn-small">Import Data</button>
-                <button onclick="testBitmapValidation()" class="btn-small">Test Validation</button>
-                <button onclick="showSystemInfo()" class="btn-small">System Info</button>
+                <button onclick="testBitmapValidation()" class="btn-small">Test Bitmap Validation</button>
             </div>
             
             <div id="errorContainer"></div>
@@ -543,518 +546,31 @@
 
     <script>
         /* 
-         * Enhanced Bitcoin Bitmap & UTXO Protocol Analyzer
-         * Features: Advanced import management, persistent storage, redundancy prevention
+         * Bitcoin Bitmap & UTXO Protocol Analyzer
+         * Based on comprehensive bitmap OCI system and dual analysis approach
          */
 
-        // ==================== IMPORT MANAGER ====================
-        class ImportManager {
-            constructor() {
-                this.modules = new Map();
-                this.loadingPromises = new Map();
-                this.importHistory = [];
-                this.retryCount = new Map();
-                this.maxRetries = 3;
-            }
-
-            async importModule(name, url, options = {}) {
-                // Prevent duplicate imports
-                if (this.modules.has(name)) {
-                    debugLog(`Module ${name} already imported`);
-                    return this.modules.get(name);
-                }
-
-                // Check for existing loading promise
-                if (this.loadingPromises.has(name)) {
-                    debugLog(`Module ${name} is already loading, waiting...`);
-                    return await this.loadingPromises.get(name);
-                }
-
-                const loadPromise = this._loadModule(name, url, options);
-                this.loadingPromises.set(name, loadPromise);
-
-                try {
-                    const module = await loadPromise;
-                    this.modules.set(name, module);
-                    this.importHistory.push({
-                        name,
-                        url,
-                        timestamp: Date.now(),
-                        success: true
-                    });
-                    this.loadingPromises.delete(name);
-                    this.retryCount.delete(name);
-                    debugLog(`Module ${name} imported successfully`);
-                    return module;
-                } catch (error) {
-                    this.loadingPromises.delete(name);
-                    this.importHistory.push({
-                        name,
-                        url,
-                        timestamp: Date.now(),
-                        success: false,
-                        error: error.message
-                    });
-                    
-                    // Retry logic
-                    const retries = this.retryCount.get(name) || 0;
-                    if (retries < this.maxRetries) {
-                        this.retryCount.set(name, retries + 1);
-                        debugLog(`Retrying import for ${name} (attempt ${retries + 1}/${this.maxRetries})`);
-                        await new Promise(resolve => setTimeout(resolve, 1000 * (retries + 1)));
-                        return this.importModule(name, url, options);
-                    }
-                    
-                    throw error;
-                }
-            }
-
-            async _loadModule(name, url, options) {
-                const { type = 'javascript', timeout = 30000 } = options;
-                
-                return new Promise(async (resolve, reject) => {
-                    const timeoutId = setTimeout(() => {
-                        reject(new Error(`Module ${name} import timeout`));
-                    }, timeout);
-
-                    try {
-                        if (type === 'javascript') {
-                            const response = await rateLimitedFetch(url);
-                            if (!response.ok) {
-                                throw new Error(`Failed to fetch module: ${response.status}`);
-                            }
-
-                            const moduleCode = await response.text();
-                            
-                            // Validate JavaScript syntax
-                            try {
-                                new Function(moduleCode);
-                            } catch (syntaxError) {
-                                throw new Error(`Invalid JavaScript syntax in module ${name}: ${syntaxError.message}`);
-                            }
-
-                            // Create secure module environment
-                            const moduleBlob = new Blob([moduleCode], { type: 'application/javascript' });
-                            const moduleUrl = URL.createObjectURL(moduleBlob);
-                            
-                            const module = await import(moduleUrl);
-                            URL.revokeObjectURL(moduleUrl);
-                            
-                            clearTimeout(timeoutId);
-                            resolve(module);
-                        } else {
-                            throw new Error(`Unsupported module type: ${type}`);
-                        }
-                    } catch (error) {
-                        clearTimeout(timeoutId);
-                        reject(error);
-                    }
-                });
-            }
-
-            getModule(name) {
-                return this.modules.get(name);
-            }
-
-            hasModule(name) {
-                return this.modules.has(name);
-            }
-
-            clearModule(name) {
-                this.modules.delete(name);
-                this.loadingPromises.delete(name);
-                this.retryCount.delete(name);
-            }
-
-            getImportHistory() {
-                return [...this.importHistory];
-            }
-
-            getSystemStatus() {
-                return {
-                    modulesLoaded: this.modules.size,
-                    loadingInProgress: this.loadingPromises.size,
-                    totalImportAttempts: this.importHistory.length,
-                    successfulImports: this.importHistory.filter(h => h.success).length,
-                    failedImports: this.importHistory.filter(h => !h.success).length
-                };
-            }
-        }
-
-        // ==================== DATA MANAGER ====================
-        class DataManager {
-            constructor(importManager) {
-                this.importManager = importManager;
-                this.caches = new Map();
-                this.persistentKeys = new Set();
-                this.compressionEnabled = true;
-                this.maxCacheSize = 50 * 1024 * 1024; // 50MB
-                this.cleanupThreshold = 0.8; // Clean when 80% full
-                this.initializeCaches();
-            }
-
-            initializeCaches() {
-                // Initialize all cache types
-                const cacheTypes = [
-                    'transactions',
-                    'ordinals',
-                    'content',
-                    'validation',
-                    'bitmaps',
-                    'visualizations',
-                    'modules',
-                    'addresses',
-                    'blockData'
-                ];
-
-                cacheTypes.forEach(type => {
-                    this.caches.set(type, new Map());
-                });
-
-                this.loadFromPersistentStorage();
-            }
-
-            async set(cacheType, key, value, options = {}) {
-                const { persistent = false, ttl = null, compress = false } = options;
-                
-                if (!this.caches.has(cacheType)) {
-                    this.caches.set(cacheType, new Map());
-                }
-
-                const cache = this.caches.get(cacheType);
-                const timestamp = Date.now();
-                
-                let processedValue = value;
-                if (compress && this.compressionEnabled) {
-                    processedValue = await this.compressData(value);
-                }
-
-                const cacheEntry = {
-                    value: processedValue,
-                    timestamp,
-                    ttl: ttl ? timestamp + ttl : null,
-                    compressed: compress,
-                    size: this.calculateSize(processedValue)
-                };
-
-                cache.set(key, cacheEntry);
-
-                if (persistent) {
-                    this.persistentKeys.add(`${cacheType}:${key}`);
-                    await this.saveToPersistentStorage(cacheType, key, cacheEntry);
-                }
-
-                // Trigger cleanup if needed
-                if (this.getCurrentCacheSize() > this.maxCacheSize * this.cleanupThreshold) {
-                    await this.performCleanup();
-                }
-
-                debugLog(`Cached ${cacheType}:${key} (${cacheEntry.size} bytes)`);
-            }
-
-            async get(cacheType, key) {
-                if (!this.caches.has(cacheType)) {
-                    return null;
-                }
-
-                const cache = this.caches.get(cacheType);
-                const entry = cache.get(key);
-
-                if (!entry) {
-                    // Try loading from persistent storage
-                    const persistentEntry = await this.loadFromPersistentStorageKey(cacheType, key);
-                    if (persistentEntry) {
-                        cache.set(key, persistentEntry);
-                        return await this.processRetrievedValue(persistentEntry);
-                    }
-                    return null;
-                }
-
-                // Check TTL
-                if (entry.ttl && Date.now() > entry.ttl) {
-                    cache.delete(key);
-                    this.removeFromPersistentStorage(cacheType, key);
-                    return null;
-                }
-
-                return await this.processRetrievedValue(entry);
-            }
-
-            async processRetrievedValue(entry) {
-                let value = entry.value;
-                
-                if (entry.compressed && this.compressionEnabled) {
-                    value = await this.decompressData(value);
-                }
-
-                return value;
-            }
-
-            has(cacheType, key) {
-                if (!this.caches.has(cacheType)) {
-                    return false;
-                }
-                return this.caches.get(cacheType).has(key);
-            }
-
-            async compressData(data) {
-                // Simple compression using JSON stringify + base64
-                try {
-                    const jsonString = JSON.stringify(data);
-                    const compressed = btoa(jsonString);
-                    return { compressed: true, data: compressed };
-                } catch (error) {
-                    debugLog('Compression failed, storing uncompressed:', error);
-                    return data;
-                }
-            }
-
-            async decompressData(compressedData) {
-                if (!compressedData.compressed) {
-                    return compressedData;
-                }
-
-                try {
-                    const jsonString = atob(compressedData.data);
-                    return JSON.parse(jsonString);
-                } catch (error) {
-                    debugLog('Decompression failed:', error);
-                    return compressedData;
-                }
-            }
-
-            calculateSize(data) {
-                try {
-                    return new Blob([JSON.stringify(data)]).size;
-                } catch {
-                    return 0;
-                }
-            }
-
-            getCurrentCacheSize() {
-                let totalSize = 0;
-                for (const cache of this.caches.values()) {
-                    for (const entry of cache.values()) {
-                        totalSize += entry.size || 0;
-                    }
-                }
-                return totalSize;
-            }
-
-            async performCleanup() {
-                debugLog('Performing cache cleanup...');
-                
-                // Collect all entries with timestamps
-                const allEntries = [];
-                for (const [cacheType, cache] of this.caches.entries()) {
-                    for (const [key, entry] of cache.entries()) {
-                        allEntries.push({
-                            cacheType,
-                            key,
-                            entry,
-                            lastAccess: entry.timestamp,
-                            isPersistent: this.persistentKeys.has(`${cacheType}:${key}`)
-                        });
-                    }
-                }
-
-                // Sort by last access time, keeping persistent entries
-                allEntries.sort((a, b) => {
-                    if (a.isPersistent && !b.isPersistent) return 1;
-                    if (!a.isPersistent && b.isPersistent) return -1;
-                    return a.lastAccess - b.lastAccess;
-                });
-
-                // Remove oldest 20% of non-persistent entries
-                const targetSize = this.maxCacheSize * 0.6; // Clean to 60%
-                let currentSize = this.getCurrentCacheSize();
-                let removedCount = 0;
-
-                for (const item of allEntries) {
-                    if (currentSize <= targetSize) break;
-                    if (item.isPersistent) continue;
-
-                    this.caches.get(item.cacheType).delete(item.key);
-                    currentSize -= item.entry.size || 0;
-                    removedCount++;
-                }
-
-                debugLog(`Cache cleanup complete. Removed ${removedCount} entries.`);
-            }
-
-            async saveToPersistentStorage(cacheType, key, entry) {
-                if (!window.localStorage) return;
-
-                try {
-                    const storageKey = `btc_analyzer_${cacheType}_${key}`;
-                    const data = {
-                        ...entry,
-                        savedAt: Date.now()
-                    };
-                    localStorage.setItem(storageKey, JSON.stringify(data));
-                } catch (error) {
-                    debugLog('Failed to save to persistent storage:', error);
-                }
-            }
-
-            async loadFromPersistentStorageKey(cacheType, key) {
-                if (!window.localStorage) return null;
-
-                try {
-                    const storageKey = `btc_analyzer_${cacheType}_${key}`;
-                    const data = localStorage.getItem(storageKey);
-                    if (!data) return null;
-
-                    const entry = JSON.parse(data);
-                    
-                    // Check if data is too old (7 days)
-                    if (Date.now() - entry.savedAt > 7 * 24 * 60 * 60 * 1000) {
-                        localStorage.removeItem(storageKey);
-                        return null;
-                    }
-
-                    return entry;
-                } catch (error) {
-                    debugLog('Failed to load from persistent storage:', error);
-                    return null;
-                }
-            }
-
-            async loadFromPersistentStorage() {
-                if (!window.localStorage) return;
-
-                const prefix = 'btc_analyzer_';
-                for (let i = 0; i < localStorage.length; i++) {
-                    const key = localStorage.key(i);
-                    if (key && key.startsWith(prefix)) {
-                        try {
-                            const parts = key.replace(prefix, '').split('_');
-                            if (parts.length >= 2) {
-                                const cacheType = parts[0];
-                                const cacheKey = parts.slice(1).join('_');
-                                this.persistentKeys.add(`${cacheType}:${cacheKey}`);
-                            }
-                        } catch (error) {
-                            debugLog('Error loading persistent key:', error);
-                        }
-                    }
-                }
-
-                debugLog(`Loaded ${this.persistentKeys.size} persistent keys`);
-            }
-
-            removeFromPersistentStorage(cacheType, key) {
-                if (!window.localStorage) return;
-
-                try {
-                    const storageKey = `btc_analyzer_${cacheType}_${key}`;
-                    localStorage.removeItem(storageKey);
-                    this.persistentKeys.delete(`${cacheType}:${key}`);
-                } catch (error) {
-                    debugLog('Failed to remove from persistent storage:', error);
-                }
-            }
-
-            clearCache(cacheType = null) {
-                if (cacheType) {
-                    if (this.caches.has(cacheType)) {
-                        this.caches.get(cacheType).clear();
-                    }
-                } else {
-                    this.caches.clear();
-                    this.initializeCaches();
-                }
-            }
-
-            exportData() {
-                const exportData = {
-                    timestamp: Date.now(),
-                    version: '1.0',
-                    caches: {},
-                    persistentKeys: Array.from(this.persistentKeys)
-                };
-
-                for (const [cacheType, cache] of this.caches.entries()) {
-                    exportData.caches[cacheType] = Array.from(cache.entries());
-                }
-
-                return exportData;
-            }
-
-            async importData(importData) {
-                if (!importData || !importData.caches) {
-                    throw new Error('Invalid import data format');
-                }
-
-                this.clearCache();
-
-                for (const [cacheType, entries] of Object.entries(importData.caches)) {
-                    const cache = new Map();
-                    for (const [key, entry] of entries) {
-                        cache.set(key, entry);
-                    }
-                    this.caches.set(cacheType, cache);
-                }
-
-                if (importData.persistentKeys) {
-                    this.persistentKeys = new Set(importData.persistentKeys);
-                }
-
-                debugLog('Data imported successfully');
-            }
-
-            getStats() {
-                const stats = {
-                    cacheTypes: this.caches.size,
-                    totalEntries: 0,
-                    totalSize: this.getCurrentCacheSize(),
-                    persistentEntries: this.persistentKeys.size,
-                    cacheDetails: {}
-                };
-
-                for (const [cacheType, cache] of this.caches.entries()) {
-                    stats.totalEntries += cache.size;
-                    stats.cacheDetails[cacheType] = {
-                        entries: cache.size,
-                        size: Array.from(cache.values()).reduce((sum, entry) => sum + (entry.size || 0), 0)
-                    };
-                }
-
-                return stats;
-            }
-        }
-
-        // ==================== GLOBAL CONFIGURATION ====================
-        const CONFIG = {
-            api: {
-                ordinals: 'https://ordinals.com',
-                mempool: 'https://mempool.space/api',
-                blockchain: 'https://blockchain.info'
-            },
-            modules: {
-                mondrian: 'https://ordinals.com/content/55551557695dd82a2bda5ec3497684ec7cbb2cc1752ff5101accff1648666c3ai0'
-            },
-            performance: {
-                maxConcurrent: 3,
-                fetchDelay: 200,
-                retryAttempts: 3,
-                requestTimeout: 30000
-            },
-            cache: {
-                defaultTTL: 24 * 60 * 60 * 1000, // 24 hours
-                bitmapTTL: 7 * 24 * 60 * 60 * 1000, // 7 days
-                maxSize: 50 * 1024 * 1024 // 50MB
-            }
-        };
-
-        // ==================== GLOBAL STATE ====================
+        // Global state and configuration
         let currentAnalysis = null;
-        let importManager = null;
-        let dataManager = null;
-        let lastFetchTime = 0;
         window.DEBUG_MODE = false;
+        
+        // Caches
+        const txCache = new Map();
+        const ordinalsCache = new Map();
+        const contentCache = new Map();
+        const validationCache = new Map();
+        const bitmapCache = new Map();
+        const visualizationCache = new Map();
+        const mondrianModule = new Map();
+        
+        // API configuration
+        const ORDINALS_BASE_URL = 'https://ordinals.com';
+        const MEMPOOL_BASE_URL = 'https://mempool.space/api';
+        const MAX_CONCURRENT = 3;
+        const FETCH_DELAY_MS = 200;
+        let lastFetchTime = 0;
 
-        // Legacy bitmap data
+        // Bitmap OCI Module (0-839,999.bitmap) - from original code
         const bitmapPages = Array(8).fill(0);
         const allPages = [
             '/content/01bba6c58af39d7f199aa2bceeaaba1ba91b23d2663bc4ef079a4b5e442dbf74i0',
@@ -1068,6 +584,7 @@
             '/content/bb986a1208380ec7db8df55a01c88c73a581069a51b5a2eb2734b41ba10b65c2i0'
         ];
 
+        // Bitmap reinscription indices - from original code
         const satIndices = {
             92871: 1, 92970: 1, 123132: 1, 365518: 1, 700181: 1, 826151: 1, 827151: 1, 828151: 1,
             828239: 1, 828661: 1, 829151: 1, 830151: 1, 832104: 2, 832249: 2, 832252: 2, 832385: 4,
@@ -1077,264 +594,51 @@
             839382: 2, 839397: 1, 840151: 1, 841151: 1, 842151: 1, 845151: 1
         };
 
-        // ==================== INITIALIZATION ====================
-        async function initializeApp() {
-            try {
-                updateSystemStatus('loading', 'Initializing import manager...');
-                importManager = new ImportManager();
-                
-                updateSystemStatus('loading', 'Initializing data manager...');
-                dataManager = new DataManager(importManager);
-                
-                updateSystemStatus('loading', 'Loading required modules...');
-                await preloadEssentialModules();
-                
-                updateSystemStatus('online', 'System ready');
-                debugLog('Application initialized successfully');
-            } catch (error) {
-                console.error('Failed to initialize application:', error);
-                updateSystemStatus('offline', `Initialization failed: ${error.message}`);
-            }
-        }
-
-        async function preloadEssentialModules() {
-            // Preload commonly used modules
-            try {
-                // Only load Mondrian module if not already loaded
-                if (!importManager.hasModule('mondrian')) {
-                    await importManager.importModule('mondrian', CONFIG.modules.mondrian);
-                }
-            } catch (error) {
-                debugLog('Failed to preload modules:', error);
-                // Continue without preloaded modules
-            }
-        }
-
-        function updateSystemStatus(status, message) {
-            const statusElement = document.getElementById('systemStatus');
-            if (statusElement) {
-                const indicator = statusElement.querySelector('.status-indicator');
-                if (indicator) {
-                    indicator.className = `status-indicator status-${status}`;
-                }
-                statusElement.innerHTML = `<span class="status-indicator status-${status}"></span> ${message}`;
-            }
-        }
-
-        // ==================== ENHANCED UTILITY FUNCTIONS ====================
+        // Debug logging
         function debugLog(message, data = null) {
             if (window.DEBUG_MODE) {
                 console.log(`[DEBUG] ${message}`, data);
             }
         }
 
+        // Rate-limited fetch
         async function rateLimitedFetch(url, options = {}) {
             const now = Date.now();
             const timeSinceLastFetch = now - lastFetchTime;
             
-            if (timeSinceLastFetch < CONFIG.performance.fetchDelay) {
-                await new Promise(resolve => 
-                    setTimeout(resolve, CONFIG.performance.fetchDelay - timeSinceLastFetch)
-                );
+            if (timeSinceLastFetch < FETCH_DELAY_MS) {
+                await new Promise(resolve => setTimeout(resolve, FETCH_DELAY_MS - timeSinceLastFetch));
             }
             
             lastFetchTime = Date.now();
             debugLog(`Fetching: ${url}`);
             
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), CONFIG.performance.requestTimeout);
-            
             try {
-                const response = await fetch(url, {
-                    ...options,
-                    signal: controller.signal
-                });
-                clearTimeout(timeoutId);
+                const response = await fetch(url, options);
                 debugLog(`Response: ${response.status} for ${url}`);
                 return response;
             } catch (error) {
-                clearTimeout(timeoutId);
                 debugLog(`Fetch error for ${url}:`, error);
                 throw error;
             }
         }
 
-        // ==================== ENHANCED DATA FETCHING ====================
-        async function fetchUTXOs(address) {
-            const cacheKey = `utxos_${address}`;
+        // Bitcoin address validation
+        function isValidBitcoinAddress(address) {
+            const taproot = /^bc1p[a-zA-HJ-NP-Z0-9]{58}$/;
+            const segwit = /^bc1[a-zA-HJ-NP-Z0-9]{25,62}$/;
+            const legacy = /^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$/;
             
-            // Check cache first
-            const cached = await dataManager.get('addresses', cacheKey);
-            if (cached) {
-                debugLog(`Using cached UTXOs for ${address}`);
-                return cached;
-            }
-
-            const response = await rateLimitedFetch(`${CONFIG.api.mempool}/address/${address}/utxo`);
-            if (!response.ok) {
-                throw new Error(`Failed to fetch UTXOs: ${response.status}${response.status === 0 ? ' (CORS Error)' : ''}`);
-            }
-            
-            const utxos = await response.json();
-            
-            // Cache with TTL
-            await dataManager.set('addresses', cacheKey, utxos, {
-                persistent: true,
-                ttl: CONFIG.cache.defaultTTL
-            });
-            
-            return utxos;
+            return taproot.test(address) || segwit.test(address) || legacy.test(address);
         }
 
-        async function fetchTransactionDetails(txid) {
-            const cached = await dataManager.get('transactions', txid);
-            if (cached) {
-                debugLog(`Using cached transaction: ${txid}`);
-                return cached;
-            }
-
-            try {
-                const response = await rateLimitedFetch(`${CONFIG.api.mempool}/tx/${txid}`);
-                if (!response.ok) {
-                    return null;
-                }
-                
-                const data = await response.json();
-                
-                // Cache transaction data persistently
-                await dataManager.set('transactions', txid, data, {
-                    persistent: true,
-                    ttl: CONFIG.cache.defaultTTL
-                });
-                
-                return data;
-            } catch (error) {
-                console.warn(`Failed to fetch transaction ${txid}:`, error);
-                return null;
-            }
-        }
-
-        async function fetchOrdinalsData(utxo) {
-            const outpoint = `${utxo.txid}:${utxo.vout}`;
-            
-            const cached = await dataManager.get('ordinals', outpoint);
-            if (cached) {
-                debugLog(`Using cached ordinals data: ${outpoint}`);
-                return cached;
-            }
-
-            try {
-                const response = await rateLimitedFetch(`${CONFIG.api.ordinals}/r/utxo/${outpoint}`);
-                
-                if (!response.ok) {
-                    if (response.status === 404) {
-                        await dataManager.set('ordinals', outpoint, null, {
-                            persistent: false,
-                            ttl: CONFIG.cache.defaultTTL
-                        });
-                        return null;
-                    }
-                    throw new Error(`Failed to fetch ordinals data: ${response.status}`);
-                }
-                
-                const data = await response.json();
-                
-                // Cache ordinals data
-                await dataManager.set('ordinals', outpoint, data, {
-                    persistent: true,
-                    ttl: CONFIG.cache.defaultTTL
-                });
-                
-                return data;
-                
-            } catch (error) {
-                debugLog(`Failed to fetch ordinals data for ${outpoint}:`, error);
-                await dataManager.set('ordinals', outpoint, null, {
-                    persistent: false,
-                    ttl: CONFIG.cache.defaultTTL / 24 // Shorter TTL for errors
-                });
-                return null;
-            }
-        }
-
-        async function fetchInscriptionContent(inscriptionId) {
-            if (!inscriptionId || typeof inscriptionId !== 'string' || inscriptionId === 'undefined') {
-                debugLog(`Invalid inscription ID: ${inscriptionId}`);
-                return null;
-            }
-            
-            if (!/^[a-f0-9]{64}i\d+$/i.test(inscriptionId)) {
-                debugLog(`Invalid inscription ID format: ${inscriptionId}`);
-                return null;
-            }
-            
-            const cached = await dataManager.get('content', inscriptionId);
-            if (cached) {
-                debugLog(`Using cached content: ${inscriptionId}`);
-                return cached;
-            }
-
-            try {
-                const response = await rateLimitedFetch(`${CONFIG.api.ordinals}/content/${inscriptionId}`);
-                if (!response.ok) {
-                    if (response.status === 404) {
-                        debugLog(`Inscription content not found: ${inscriptionId}`);
-                    }
-                    await dataManager.set('content', inscriptionId, null, { persistent: false });
-                    return null;
-                }
-                
-                const contentType = response.headers.get('content-type') || 'text/plain';
-                debugLog(`Content type for ${inscriptionId}: ${contentType}`);
-                
-                let content;
-                if (contentType.includes('text/') || contentType.includes('application/json')) {
-                    content = await response.text();
-                } else {
-                    content = await response.text();
-                }
-                
-                const result = {
-                    content: content.trim(),
-                    contentType: contentType
-                };
-                
-                debugLog(`Fetched content for ${inscriptionId}:`, { 
-                    contentType, 
-                    contentLength: content.length,
-                    contentPreview: content.substring(0, 100) + (content.length > 100 ? '...' : '')
-                });
-                
-                // Cache content with compression for large content
-                await dataManager.set('content', inscriptionId, result, {
-                    persistent: true,
-                    ttl: CONFIG.cache.defaultTTL,
-                    compress: content.length > 1000
-                });
-                
-                return result;
-            } catch (error) {
-                debugLog(`Failed to fetch content for ${inscriptionId}:`, error);
-                await dataManager.set('content', inscriptionId, null, { persistent: false });
-                return null;
-            }
-        }
-
-        // ==================== BITMAP FUNCTIONS (Enhanced) ====================
+        // ==================== BITMAP OCI FUNCTIONS ====================
+        // From original code - bitmap page filling
         async function fillPage(page) {
-            const cacheKey = `page_${page}`;
-            
-            // Check cache first
-            const cached = await dataManager.get('bitmaps', cacheKey);
-            if (cached) {
-                bitmapPages[page] = cached;
-                debugLog(`Using cached bitmap page ${page}`);
-                return;
-            }
-
             try {
-                let data = await rateLimitedFetch(CONFIG.api.ordinals + allPages[page]).then(r => r.text());
+                let data = await rateLimitedFetch(ORDINALS_BASE_URL + allPages[page]).then(r => r.text());
                 
+                // Fix for inconsistent (page 2 & 3) formatting
                 if (page === 2 || page === 3) {
                     data = '[' + data + ']';
                     const parsedData = JSON.parse(data);
@@ -1352,6 +656,7 @@
                     }
                 }
 
+                // Rebuild full sat numbers from deltas
                 const fullSats = [];
                 data[0].forEach((sat, i) => {
                     if (i === 0) {
@@ -1361,20 +666,13 @@
                     }
                 });
 
+                // Put them back into correct order
                 let filledArray = Array(100000).fill(0);
                 data[1].forEach((index, i) => {
                     filledArray[index] = fullSats[i];
                 });
 
                 bitmapPages[page] = filledArray;
-                
-                // Cache bitmap page data persistently
-                await dataManager.set('bitmaps', cacheKey, filledArray, {
-                    persistent: true,
-                    ttl: CONFIG.cache.bitmapTTL,
-                    compress: true
-                });
-                
                 debugLog(`Filled bitmap page ${page} with ${filledArray.filter(x => x > 0).length} entries`);
             } catch (error) {
                 console.error(`Error filling bitmap page ${page}:`, error);
@@ -1382,6 +680,7 @@
             }
         }
 
+        // Get bitmap sat number
         async function getBitmapSat(bitmapNumber) {
             if (bitmapNumber < 0 || bitmapNumber > 839999) {
                 throw new Error(`getBitmapSat: number ${bitmapNumber} is outside range 0-839,999!`);
@@ -1396,16 +695,18 @@
             return bitmapPages[page][bitmapNumber % 100000];
         }
 
+        // Get bitmap sat index for reinscriptions
         function getBitmapSatIndex(bitmapNumber) {
             return satIndices[bitmapNumber] || 0;
         }
 
+        // Get bitmap inscription ID
         async function getBitmapInscriptionId(bitmapNumber) {
             try {
                 const sat = await getBitmapSat(bitmapNumber);
                 const index = getBitmapSatIndex(bitmapNumber);
                 
-                const response = await rateLimitedFetch(`${CONFIG.api.ordinals}/r/sat/${sat}/at/${index}`);
+                const response = await rateLimitedFetch(`${ORDINALS_BASE_URL}/r/sat/${sat}/at/${index}`);
                 if (!response.ok) {
                     throw new Error(`Failed to get inscription for sat ${sat} at index ${index}`);
                 }
@@ -1418,57 +719,41 @@
             }
         }
 
-        // ==================== VALIDATION FUNCTIONS (Enhanced) ====================
+        // ==================== BITMAP VALIDATION ====================
+        // Validate bitmap content - from original code logic
         async function validateBitmapContent(content, inscriptionId) {
             debugLog(`Validating bitmap content: "${content}" with inscription ID: ${inscriptionId}`);
             
-            const cacheKey = `validation_${content}_${inscriptionId || 'none'}`;
-            const cached = await dataManager.get('validation', cacheKey);
-            if (cached) {
-                debugLog(`Using cached validation result`);
-                return cached;
-            }
-            
             const match = content.match(/^(\d+)(?:\.(\d+))?\.bitmap$/);
             if (!match) {
-                const result = {
+                return {
                     status: 'invalid',
                     message: 'Invalid bitmap format. Expected format: "number.bitmap" or "parcel.block.bitmap"'
                 };
-                await dataManager.set('validation', cacheKey, result, { persistent: true });
-                return result;
             }
 
             const firstNumber = parseInt(match[1]);
             const secondNumber = match[2] ? parseInt(match[2]) : undefined;
 
-            let result;
+            // Check for parcel format (parcel.block.bitmap)
             if (secondNumber !== undefined) {
                 const parcelNumber = firstNumber;
                 const bitmapNumber = secondNumber;
                 debugLog(`Parsing parcel format: parcel=${parcelNumber}, bitmap=${bitmapNumber}`);
-                result = await validateBitmapParcel(bitmapNumber, parcelNumber, inscriptionId);
+                return await validateBitmapParcel(bitmapNumber, parcelNumber, inscriptionId);
             } else {
                 const bitmapNumber = firstNumber;
                 debugLog(`Parsing bitmap format: bitmap=${bitmapNumber}`);
-                result = await validateBitmap(bitmapNumber, inscriptionId);
+                return await validateBitmap(bitmapNumber, inscriptionId);
             }
-
-            // Cache the validation result
-            await dataManager.set('validation', cacheKey, result, {
-                persistent: true,
-                ttl: CONFIG.cache.bitmapTTL
-            });
-
-            return result;
         }
 
+        // Validate bitmap
         async function validateBitmap(bitmapNumber, inscriptionId) {
-            const cacheKey = `bitmap_${bitmapNumber}_${inscriptionId || 'none'}`;
+            const cacheKey = `bitmap-${bitmapNumber}-${inscriptionId || 'none'}`;
             
-            const cached = await dataManager.get('validation', cacheKey);
-            if (cached) {
-                return cached;
+            if (validationCache.has(cacheKey)) {
+                return validationCache.get(cacheKey);
             }
 
             try {
@@ -1478,10 +763,11 @@
                         message: `Bitmap #${bitmapNumber} (high number, pattern available)`,
                         details: { bitmapNumber, inscriptionId, isHighNumber: true }
                     };
-                    await dataManager.set('validation', cacheKey, result, { persistent: true });
+                    validationCache.set(cacheKey, result);
                     return result;
                 }
 
+                // Get expected inscription ID
                 const expectedId = await getBitmapInscriptionId(bitmapNumber);
                 
                 if (inscriptionId && expectedId !== inscriptionId) {
@@ -1490,10 +776,11 @@
                         message: 'Inscription ID does not match bitmap number',
                         details: { bitmapNumber, inscriptionId, expectedId }
                     };
-                    await dataManager.set('validation', cacheKey, result, { persistent: true });
+                    validationCache.set(cacheKey, result);
                     return result;
                 }
 
+                // Fetch and validate content
                 const contentData = await fetchInscriptionContent(expectedId);
                 const content = contentData && typeof contentData === 'object' ? contentData.content : contentData;
                 
@@ -1503,7 +790,7 @@
                         message: 'Invalid bitmap content format',
                         details: { bitmapNumber, inscriptionId: expectedId, content, contentData }
                     };
-                    await dataManager.set('validation', cacheKey, result, { persistent: true });
+                    validationCache.set(cacheKey, result);
                     return result;
                 }
 
@@ -1518,7 +805,7 @@
                     }
                 };
                 
-                await dataManager.set('validation', cacheKey, result, { persistent: true });
+                validationCache.set(cacheKey, result);
                 return result;
 
             } catch (error) {
@@ -1527,11 +814,12 @@
                     message: error.message || 'Unknown validation error',
                     details: { bitmapNumber, inscriptionId, error: error.message }
                 };
-                await dataManager.set('validation', cacheKey, result, { persistent: true });
+                validationCache.set(cacheKey, result);
                 return result;
             }
         }
 
+        // Validate bitmap parcel
         async function validateBitmapParcel(bitmapNumber, parcelNumber, parcelInscriptionId) {
             try {
                 const bitmapResult = await validateBitmap(bitmapNumber);
@@ -1567,10 +855,135 @@
             }
         }
 
-        // ==================== UTXO ANALYSIS (Enhanced) ====================
+        // ==================== UTXO FETCHING AND ANALYSIS ====================
+        // Fetch UTXOs
+        async function fetchUTXOs(address) {
+            const response = await rateLimitedFetch(`${MEMPOOL_BASE_URL}/address/${address}/utxo`);
+            if (!response.ok) {
+                throw new Error(`Failed to fetch UTXOs: ${response.status}${response.status === 0 ? ' (CORS Error)' : ''}`);
+            }
+            return await response.json();
+        }
+
+        // Fetch transaction details
+        async function fetchTransactionDetails(txid) {
+            if (txCache.has(txid)) {
+                return txCache.get(txid);
+            }
+
+            try {
+                const response = await rateLimitedFetch(`${MEMPOOL_BASE_URL}/tx/${txid}`);
+                if (!response.ok) {
+                    return null;
+                }
+                
+                const data = await response.json();
+                txCache.set(txid, data);
+                return data;
+            } catch (error) {
+                console.warn(`Failed to fetch transaction ${txid}:`, error);
+                return null;
+            }
+        }
+
+        // Fetch ordinals data
+        async function fetchOrdinalsData(utxo) {
+            const outpoint = `${utxo.txid}:${utxo.vout}`;
+            
+            if (ordinalsCache.has(outpoint)) {
+                return ordinalsCache.get(outpoint);
+            }
+
+            try {
+                const response = await rateLimitedFetch(`${ORDINALS_BASE_URL}/r/utxo/${outpoint}`);
+                
+                if (!response.ok) {
+                    if (response.status === 404) {
+                        ordinalsCache.set(outpoint, null);
+                        return null;
+                    }
+                    throw new Error(`Failed to fetch ordinals data: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                ordinalsCache.set(outpoint, data);
+                return data;
+                
+            } catch (error) {
+                debugLog(`Failed to fetch ordinals data for ${outpoint}:`, error);
+                ordinalsCache.set(outpoint, null);
+                return null;
+            }
+        }
+
+        // Fetch inscription content
+        async function fetchInscriptionContent(inscriptionId) {
+            if (!inscriptionId || typeof inscriptionId !== 'string' || inscriptionId === 'undefined') {
+                debugLog(`Invalid inscription ID: ${inscriptionId}`);
+                return null;
+            }
+            
+            if (!/^[a-f0-9]{64}i\d+$/i.test(inscriptionId)) {
+                debugLog(`Invalid inscription ID format: ${inscriptionId}`);
+                return null;
+            }
+            
+            const cacheKey = `content-${inscriptionId}`;
+            
+            if (contentCache.has(cacheKey)) {
+                return contentCache.get(cacheKey);
+            }
+
+            try {
+                const response = await rateLimitedFetch(`${ORDINALS_BASE_URL}/content/${inscriptionId}`);
+                if (!response.ok) {
+                    if (response.status === 404) {
+                        debugLog(`Inscription content not found: ${inscriptionId}`);
+                    }
+                    contentCache.set(cacheKey, null);
+                    return null;
+                }
+                
+                // Get content type from response headers
+                const contentType = response.headers.get('content-type') || 'text/plain';
+                debugLog(`Content type for ${inscriptionId}: ${contentType}`);
+                
+                // Handle different content types appropriately
+                let content;
+                if (contentType.includes('text/') || contentType.includes('application/json')) {
+                    content = await response.text();
+                } else if (contentType.includes('image/') || contentType.includes('application/octet-stream')) {
+                    // For binary content, we might want to handle differently
+                    content = await response.text();
+                } else {
+                    // Default to text for unknown types
+                    content = await response.text();
+                }
+                
+                const result = {
+                    content: content.trim(),
+                    contentType: contentType
+                };
+                
+                debugLog(`Fetched content for ${inscriptionId}:`, { 
+                    contentType, 
+                    contentLength: content.length,
+                    contentPreview: content.substring(0, 100) + (content.length > 100 ? '...' : '')
+                });
+                
+                contentCache.set(cacheKey, result);
+                return result;
+            } catch (error) {
+                debugLog(`Failed to fetch content for ${inscriptionId}:`, error);
+                contentCache.set(cacheKey, null);
+                return null;
+            }
+        }
+
+        // Streamlined UTXO analysis - ordinals.com first, then ONLY OP_RETURN analysis for alkanes
         async function analyzeUTXO(utxo) {
             const outpoint = `${utxo.txid}:${utxo.vout}`;
-            debugLog(`Starting comprehensive analysis for UTXO: ${outpoint}`);
+            debugLog(`Starting streamlined analysis for UTXO: ${outpoint}`);
             
             const analysis = {
                 txid: utxo.txid,
@@ -1579,61 +992,49 @@
                 protocols: [],
                 ordinalsData: null,
                 bitmapData: null,
-                rawAnalysis: null,
+                brc20Data: null,
+                alkaneData: null,
+                protoruneData: null,
                 error: null
             };
 
             try {
-                // STEP 1: Get ordinals.com data (confirmed protocols)
+                // STEP 1: Check ordinals.com first - authoritative for ordinals/runes/rare sats
                 const ordinalsData = await fetchOrdinalsData(utxo);
                 analysis.ordinalsData = ordinalsData;
 
                 if (ordinalsData) {
-                    debugLog(`Ordinals data found for ${outpoint}:`, ordinalsData);
+                    // ✅ CONFIRMED: This UTXO has ordinals data - classify it
+                    debugLog(`✅ Ordinals data confirmed for ${outpoint}:`, ordinalsData);
                     
                     // Check for inscriptions
                     const inscriptions = ordinalsData.inscriptions || [];
                     if (inscriptions.length > 0) {
                         analysis.protocols.push('ordinal');
                         
-                        // Check each inscription for bitmap content
+                        // Check each inscription for bitmap content and BRC-20
                         for (const inscription of inscriptions) {
                             const inscriptionId = inscription.id || inscription;
                             if (inscriptionId && typeof inscriptionId === 'string') {
-                                try {
-                                    const contentData = await fetchInscriptionContent(inscriptionId);
-                                    debugLog(`Inscription ${inscriptionId} content data:`, contentData);
-                                    
-                                    if (contentData && contentData.content) {
-                                        const content = contentData.content;
-                                        const contentType = contentData.contentType;
-                                        
-                                        if (content.includes('.bitmap')) {
-                                            debugLog(`Bitmap content found in ${inscriptionId}: ${content} (type: ${contentType})`);
-                                            analysis.protocols.push('bitmap');
-                                            
-                                            // Validate the bitmap using comprehensive validation
-                                            const validation = await validateBitmapContent(content, inscriptionId);
-                                            analysis.bitmapData = {
-                                                content,
-                                                contentType,
-                                                inscriptionId,
-                                                validation
-                                            };
-                                            break;
-                                        }
-                                    }
-                                } catch (contentError) {
-                                    debugLog(`Failed to fetch content for inscription ${inscriptionId}:`, contentError);
-                                }
+                                await analyzeInscriptionContent(analysis, inscriptionId);
+                                if (analysis.protocols.includes('bitmap')) break;
                             }
                         }
                     }
 
-                    // Check for runes
-                    const runes = ordinalsData.runes || [];
-                    if (runes.length > 0) {
+                    // Check for runes - FIX: runes is an object, not an array
+                    const runes = ordinalsData.runes || {};
+                    if (Object.keys(runes).length > 0) {
                         analysis.protocols.push('rune');
+                        
+                        // Store rune data for display
+                        analysis.runeData = {
+                            runes: runes,
+                            count: Object.keys(runes).length,
+                            detectionMethod: 'ordinals_confirmed'
+                        };
+                        
+                        debugLog(`🔮 RUNES found in ${outpoint}:`, Object.keys(runes));
                     }
 
                     // Check for rare sats
@@ -1647,596 +1048,253 @@
                             analysis.protocols.push('rare-sat');
                         }
                     }
-                }
-
-                // STEP 2: Raw transaction analysis for other protocols
-                const txDetails = await fetchTransactionDetails(utxo.txid);
-                if (txDetails) {
-                    const rawAnalysis = await analyzeRawTransactionData(utxo, txDetails);
-                    analysis.rawAnalysis = rawAnalysis;
-                    
-                    // Merge protocols from raw analysis
-                    if (rawAnalysis.protocols) {
-                        rawAnalysis.protocols.forEach(protocol => {
-                            if (!analysis.protocols.includes(protocol)) {
-                                analysis.protocols.push(protocol);
-                            }
-                        });
-                    }
-                }
-
-                // STEP 3: Additional analysis
-                analyzeForConsolidation(analysis, utxo, txDetails);
-
-                // Default to cardinal if no protocols found
-                if (analysis.protocols.length === 0) {
+                } else {
+                    // ❓ CARDINAL: ordinals.com doesn't know about this UTXO
+                    debugLog(`❓ Cardinal UTXO detected for ${outpoint}`);
                     analysis.protocols.push('cardinal');
                 }
 
-                debugLog(`Analysis complete for ${outpoint}, protocols: ${analysis.protocols.join(', ')}`);
+                // STEP 2: ALWAYS check OP_RETURN for alkanes (regardless of ordinals status)
+                debugLog(`🔍 Checking OP_RETURN data for alkanes in ${outpoint}`);
+                const opReturnAnalysis = await analyzeOPReturnData(utxo);
+                
+                if (opReturnAnalysis.alkaneData) {
+                    analysis.alkaneData = opReturnAnalysis.alkaneData;
+                    if (!analysis.protocols.includes('alkane')) {
+                        analysis.protocols.push('alkane');
+                        // Remove cardinal if we found alkane
+                        if (analysis.protocols.includes('cardinal')) {
+                            analysis.protocols = analysis.protocols.filter(p => p !== 'cardinal');
+                        }
+                        debugLog(`🔷 ALKANE found in ${outpoint}!`);
+                    }
+                }
+                
+                if (opReturnAnalysis.protoruneData) {
+                    analysis.protoruneData = opReturnAnalysis.protoruneData;
+                    if (!analysis.protocols.includes('protorune')) {
+                        analysis.protocols.push('protorune');
+                        if (analysis.protocols.includes('cardinal')) {
+                            analysis.protocols = analysis.protocols.filter(p => p !== 'cardinal');
+                        }
+                        debugLog(`⚡ PROTORUNE found in ${outpoint}!`);
+                    }
+                }
+
+                // STEP 3: Only do full analysis for remaining cardinals (no ordinals data + no OP_RETURN protocols)
+                if (analysis.protocols.includes('cardinal')) {
+                    debugLog(`📝 Performing consolidation analysis for cardinal ${outpoint}`);
+                    // Only check for consolidation patterns, not re-analyzing for ordinals
+                    const txDetails = await fetchTransactionDetails(utxo.txid);
+                    if (txDetails) {
+                        analyzeConsolidationOnly(analysis, utxo, txDetails);
+                    }
+                }
+
+                debugLog(`🎯 Final analysis for ${outpoint}: ${analysis.protocols.join(', ')}`);
 
             } catch (error) {
                 console.warn(`Error analyzing UTXO ${outpoint}:`, error);
                 analysis.error = error.message;
-                analysis.protocols.push('error');
+                analysis.protocols = ['error'];
             }
 
             return analysis;
         }
 
-        // Enhanced raw transaction analysis for comprehensive protocol detection
-        async function analyzeRawTransactionData(utxo, txDetails) {
+        // Dedicated OP_RETURN analysis - alkanes and protorunes only
+        async function analyzeOPReturnData(utxo) {
             const analysis = {
-                protocols: [],
                 alkaneData: null,
-                protoruneData: null,
-                stampData: null,
-                brc20Data: null,
-                unknownProtocols: [],
-                multisigData: null,
-                p2shData: null,
-                detectionDetails: {}
+                protoruneData: null
             };
 
             try {
-                if (!txDetails || !txDetails.vin || !txDetails.vout) {
+                const txDetails = await fetchTransactionDetails(utxo.txid);
+                if (!txDetails || !txDetails.vout) {
                     return analysis;
                 }
 
-                debugLog(`Enhanced raw analysis for UTXO ${utxo.txid}:${utxo.vout}`);
+                debugLog(`Analyzing OP_RETURN data for ${utxo.txid}:${utxo.vout}`);
 
-                // STEP 1: OP_RETURN outputs analysis for various protocols
+                // Check all OP_RETURN outputs in the transaction
                 for (let i = 0; i < txDetails.vout.length; i++) {
                     const vout = txDetails.vout[i];
                     
                     if (vout.scriptpubkey_type === 'op_return') {
                         const opReturnHex = vout.scriptpubkey || vout.scriptpubkey_hex || '';
-                        const opReturnData = vout.scriptpubkey_asm || '';
                         
                         debugLog(`OP_RETURN found in vout ${i}:`, { 
-                            hex: opReturnHex.substring(0, 100) + '...', 
-                            asm: opReturnData.substring(0, 100) + '...',
-                            length: opReturnHex.length 
+                            hex: opReturnHex.substring(0, 100) + (opReturnHex.length > 100 ? '...' : ''), 
+                            length: opReturnHex.length
                         });
                         
-                        // ALKANES/PROTORUNES Detection - Enhanced pattern matching
+                        // ALKANES/PROTORUNES Detection
                         const alkanePatterns = [
-                            { pattern: 'ff3f', name: 'tag-16383-le' },     // Little-endian tag 16383
-                            { pattern: '3fff', name: 'tag-16383-be' },     // Big-endian tag 16383  
-                            { pattern: 'ff7f', name: 'tag-32767' },        // Alternative tag
-                            { pattern: '7fff', name: 'tag-32767-be' },     // Alternative tag BE
-                            { pattern: '616c6b616e65', name: 'alkane-id' }, // "alkane" in hex
-                            { pattern: '70726f746f72756e65', name: 'protorune-id' } // "protorune" in hex
+                            { pattern: 'ff3f', name: 'tag-16383-le', type: 'alkane' },
+                            { pattern: '3fff', name: 'tag-16383-be', type: 'alkane' },
+                            { pattern: 'ff7f', name: 'tag-32767-le', type: 'alkane' },
+                            { pattern: '7fff', name: 'tag-32767-be', type: 'alkane' },
+                            { pattern: '616c6b616e65', name: 'alkane-text', type: 'alkane' },
+                            { pattern: '70726f746f72756e65', name: 'protorune-text', type: 'protorune' },
+                            { pattern: '414c4b', name: 'ALK-prefix', type: 'alkane' },
+                            { pattern: '414c4b414e45', name: 'ALKANE-prefix', type: 'alkane' }
                         ];
                         
-                        for (const { pattern, name } of alkanePatterns) {
-                            if (opReturnHex.toLowerCase().includes(pattern)) {
-                                if (name.includes('protorune')) {
-                                    analysis.protocols.push('protorune');
+                        for (const { pattern, name, type } of alkanePatterns) {
+                            if (opReturnHex.toLowerCase().includes(pattern.toLowerCase())) {
+                                debugLog(`🎯 PATTERN MATCH: ${name} (${pattern}) found in OP_RETURN vout ${i}`);
+                                
+                                if (type === 'protorune') {
                                     analysis.protoruneData = {
                                         pattern: name,
                                         rawData: opReturnHex,
                                         vout: i,
-                                        detectionMethod: 'op_return_hex'
+                                        detectionMethod: 'op_return_focused',
+                                        matchedPattern: pattern
                                     };
-                                    debugLog(`PROTORUNE detected via pattern: ${name}`);
-                                } else {
-                                    analysis.protocols.push('alkane');
+                                } else if (type === 'alkane') {
                                     analysis.alkaneData = {
                                         pattern: name,
                                         tag: name.includes('16383') ? 16383 : (name.includes('32767') ? 32767 : 'unknown'),
                                         rawData: opReturnHex,
                                         vout: i,
-                                        detectionMethod: 'op_return_hex'
+                                        detectionMethod: 'op_return_focused',
+                                        matchedPattern: pattern
                                     };
-                                    debugLog(`ALKANE detected via pattern: ${name}`);
                                 }
-                                break;
+                                break; // Found alkane/protorune, no need to check more patterns
                             }
-                        }
-                        
-                        // STAMPS Detection - Enhanced with case variations
-                        const stampPatterns = [
-                            { pattern: '5354414d50', name: 'STAMP', variations: ['stamp'] },
-                            { pattern: '53544d50', name: 'STMP', variations: ['stmp'] },
-                            { pattern: '5352432d3230', name: 'SRC-20', variations: ['src20', 'src-20'] },
-                            { pattern: '5352432d373231', name: 'SRC-721', variations: ['src721', 'src-721'] },
-                            { pattern: '434f554e54455250415254595354414d50', name: 'COUNTERPARTY-STAMP', variations: ['cp'] }
-                        ];
-                        
-                        for (const { pattern, name, variations } of stampPatterns) {
-                            if (opReturnHex.toLowerCase().includes(pattern.toLowerCase()) ||
-                                variations.some(v => opReturnData.toLowerCase().includes(v))) {
-                                analysis.protocols.push('stamp');
-                                analysis.stampData = {
-                                    type: name,
-                                    pattern: pattern,
-                                    rawData: opReturnHex,
-                                    vout: i,
-                                    detectionMethod: 'op_return_pattern'
-                                };
-                                debugLog(`STAMP protocol detected: ${name}`);
-                                break;
-                            }
-                        }
-                        
-                        // BRC-20 in OP_RETURN (rare but possible)
-                        if (opReturnHex.includes('6272632d3230') || // "brc-20"
-                            opReturnHex.includes('427243323020') || // "BRC20 "
-                            opReturnData.toLowerCase().includes('brc-20')) {
-                            analysis.protocols.push('brc-20');
-                            analysis.brc20Data = {
-                                location: 'op_return',
-                                rawData: opReturnHex,
-                                vout: i,
-                                detectionMethod: 'op_return_pattern'
-                            };
-                            debugLog(`BRC-20 detected in OP_RETURN`);
-                        }
-                        
-                        // RUNES (actual rune protocol detection)
-                        if (opReturnHex.includes('5255') || // "RU" prefix
-                            opReturnHex.includes('52554e45') || // "RUNE"
-                            opReturnData.toLowerCase().includes('rune')) {
-                            analysis.protocols.push('rune-protocol');
-                            analysis.detectionDetails.rune = {
-                                rawData: opReturnHex,
-                                vout: i,
-                                detectionMethod: 'op_return_rune_pattern'
-                            };
-                            debugLog(`RUNE protocol detected in OP_RETURN`);
-                        }
-                        
-                        // Enhanced unknown protocol detection
-                        if (opReturnHex.length > 40) {
-                            const unknownPatterns = detectAdvancedProtocolPatterns(opReturnHex);
-                            if (unknownPatterns.length > 0) {
-                                analysis.unknownProtocols.push({
-                                    type: 'advanced-structured',
-                                    patterns: unknownPatterns,
-                                    dataLength: opReturnHex.length / 2,
-                                    vout: i,
-                                    confidence: calculatePatternConfidence(unknownPatterns)
-                                });
-                                analysis.protocols.push('unknown-protocol');
-                                debugLog(`Advanced unknown protocol detected with ${unknownPatterns.length} patterns`);
-                            }
-                        }
-                    }
-                    
-                    // Enhanced multisig data embedding detection
-                    if (vout.scriptpubkey_type === 'multisig' && vout.scriptpubkey && vout.scriptpubkey.length > 200) {
-                        analysis.protocols.push('multisig-data');
-                        analysis.multisigData = {
-                            scriptLength: vout.scriptpubkey.length,
-                            value: vout.value,
-                            vout: i,
-                            dataDensity: calculateDataDensity(vout.scriptpubkey)
-                        };
-                        debugLog(`Multisig data embedding detected in vout ${i}, density: ${analysis.multisigData.dataDensity}`);
-                    }
-                    
-                    // P2SH data embedding (zero-value outputs)
-                    if (vout.scriptpubkey_type === 'p2sh' && vout.value === 0) {
-                        analysis.protocols.push('p2sh-data');
-                        analysis.p2shData = {
-                            scriptHash: vout.scriptpubkey,
-                            vout: i,
-                            detectionMethod: 'zero_value_p2sh'
-                        };
-                        debugLog(`P2SH data embedding detected in vout ${i}`);
-                    }
-                }
-
-                // STEP 2: Enhanced witness data analysis
-                for (let i = 0; i < txDetails.vin.length; i++) {
-                    const input = txDetails.vin[i];
-                    if (input.witness && input.witness.length > 0) {
-                        const witnessData = input.witness.join('').toLowerCase();
-                        
-                        debugLog(`Analyzing witness data from input ${i}: ${witnessData.substring(0, 100)}... (${witnessData.length} chars)`);
-                        
-                        // Enhanced ordinal envelope detection
-                        const ordinalPatterns = [
-                            { pattern: '6f7264', name: 'ord-magic' },           // "ord" in hex
-                            { pattern: '626974636f696e', name: 'bitcoin-id' },   // "bitcoin" in hex
-                            { pattern: '6f7264696e616c', name: 'ordinal-id' },   // "ordinal" in hex
-                            { pattern: '696e736372697074696f6e', name: 'inscription-id' }, // "inscription"
-                            { pattern: '00', name: 'separator' },              // NULL separator common in ordinals
-                            { pattern: '63', name: 'op-if' }                   // OP_IF (0x63) envelope start
-                        ];
-                        
-                        let ordinalScore = 0;
-                        const foundPatterns = [];
-                        
-                        for (const { pattern, name } of ordinalPatterns) {
-                            if (witnessData.includes(pattern)) {
-                                foundPatterns.push(name);
-                                if (name === 'ord-magic') ordinalScore += 4;
-                                else if (name === 'inscription-id') ordinalScore += 3;
-                                else if (name === 'bitcoin-id') ordinalScore += 2;
-                                else ordinalScore += 1;
-                            }
-                        }
-                        
-                        if (ordinalScore >= 2) {
-                            // Only add if not already detected as confirmed ordinal
-                            if (!analysis.protocols.includes('ordinal')) {
-                                analysis.protocols.push('potential-ordinal');
-                                analysis.detectionDetails.ordinal = {
-                                    inputIndex: i,
-                                    patterns: foundPatterns,
-                                    score: ordinalScore,
-                                    witnessLength: witnessData.length
-                                };
-                                debugLog(`Strong ordinal envelope detected (score: ${ordinalScore})`);
-                            }
-                        }
-                        
-                        // Enhanced BRC-20 detection
-                        const brc20Patterns = [
-                            { pattern: '6272632d3230', name: 'brc-20-id' },     // "brc-20"
-                            { pattern: '427243323020', name: 'BRC20-caps' },    // "BRC20 "
-                            { pattern: '6d696e74', name: 'mint-op' },           // "mint"
-                            { pattern: '6465706c6f79', name: 'deploy-op' },     // "deploy"
-                            { pattern: '7472616e73666572', name: 'transfer-op' }, // "transfer"
-                            { pattern: '746963', name: 'tick-field' },          // "tic" (tick)
-                            { pattern: '616d74', name: 'amt-field' }             // "amt" (amount)
-                        ];
-                        
-                        let brc20Score = 0;
-                        const brc20Found = [];
-                        
-                        for (const { pattern, name } of brc20Patterns) {
-                            if (witnessData.includes(pattern)) {
-                                brc20Found.push(name);
-                                if (name.includes('brc-20') || name.includes('BRC20')) brc20Score += 4;
-                                else if (name.includes('-op')) brc20Score += 3;
-                                else brc20Score += 2;
-                            }
-                        }
-                        
-                        // JSON structure bonus for BRC-20
-                        if (witnessData.includes('7b') && witnessData.includes('7d') && 
-                            witnessData.includes('22') && witnessData.includes('3a')) { // { } " :
-                            brc20Score += 2;
-                            brc20Found.push('json-structure');
-                        }
-                        
-                        if (brc20Score >= 4) {
-                            analysis.protocols.push('brc-20');
-                            analysis.brc20Data = {
-                                inputIndex: i,
-                                patterns: brc20Found,
-                                score: brc20Score,
-                                witnessLength: witnessData.length,
-                                detectionMethod: 'witness_comprehensive'
-                            };
-                            debugLog(`Strong BRC-20 detected (score: ${brc20Score})`);
-                        }
-                        
-                        // Large structured data analysis
-                        if (witnessData.length > 2000) {
-                            const structuredPatterns = [
-                                { pattern: '7b', type: 'JSON', weight: 3 },
-                                { pattern: '3c', type: 'HTML', weight: 4 },
-                                { pattern: '89504e47', type: 'PNG', weight: 5 },
-                                { pattern: 'ffd8ff', type: 'JPEG', weight: 5 },
-                                { pattern: '474946', type: 'GIF', weight: 5 },
-                                { pattern: '25504446', type: 'PDF', weight: 4 },
-                                { pattern: '504b0304', type: 'ZIP', weight: 3 },
-                                { pattern: '377abcaf271c', type: '7Z', weight: 3 }
-                            ];
-                            
-                            let contentScore = 0;
-                            const contentTypes = [];
-                            
-                            for (const { pattern, type, weight } of structuredPatterns) {
-                                if (witnessData.includes(pattern)) {
-                                    contentTypes.push(type);
-                                    contentScore += weight;
-                                }
-                            }
-                            
-                            if (contentScore > 0) {
-                                analysis.protocols.push('structured-data');
-                                analysis.detectionDetails.structuredData = {
-                                    inputIndex: i,
-                                    contentTypes,
-                                    score: contentScore,
-                                    witnessLength: witnessData.length
-                                };
-                                debugLog(`Structured data detected: ${contentTypes.join(', ')} (score: ${contentScore})`);
-                            }
-                        }
-                        
-                        // Advanced pattern analysis for unknown protocols
-                        const advancedPatterns = detectWitnessProtocolPatterns(witnessData);
-                        if (advancedPatterns.confidence > 0.6) {
-                            analysis.unknownProtocols.push({
-                                type: 'witness-protocol',
-                                patterns: advancedPatterns.patterns,
-                                confidence: advancedPatterns.confidence,
-                                inputIndex: i,
-                                witnessLength: witnessData.length
-                            });
-                            analysis.protocols.push('unknown-protocol');
-                            debugLog(`Unknown witness protocol detected (confidence: ${advancedPatterns.confidence})`);
                         }
                     }
                 }
-
-                // STEP 3: Enhanced transaction pattern analysis
-                analyzeTransactionPatterns(analysis, utxo, txDetails);
-
-                debugLog(`Enhanced raw analysis complete. Detected protocols:`, analysis.protocols);
 
             } catch (error) {
-                debugLog(`Error in enhanced raw transaction analysis:`, error);
-                analysis.protocols.push('analysis-error');
-                analysis.detectionDetails.error = error.message;
+                debugLog(`Error analyzing OP_RETURN data:`, error);
             }
 
             return analysis;
         }
 
-        // Helper function: Detect advanced protocol patterns
-        function detectAdvancedProtocolPatterns(hexData) {
-            const patterns = [];
-            
-            // Common protocol identifiers
-            const knownIdentifiers = [
-                { pattern: '0001', name: 'version-1', weight: 2 },
-                { pattern: '0002', name: 'version-2', weight: 2 },
-                { pattern: 'ffff', name: 'marker-ffff', weight: 3 },
-                { pattern: 'fffe', name: 'marker-fffe', weight: 3 },
-                { pattern: 'cafe', name: 'magic-cafe', weight: 3 },
-                { pattern: 'dead', name: 'magic-dead', weight: 3 },
-                { pattern: 'beef', name: 'magic-beef', weight: 3 },
-                { pattern: '1234', name: 'simple-pattern', weight: 1 },
-                { pattern: 'abcd', name: 'hex-pattern', weight: 1 }
-            ];
-            
-            for (const { pattern, name, weight } of knownIdentifiers) {
-                if (hexData.toLowerCase().includes(pattern)) {
-                    patterns.push({ name, weight, position: hexData.toLowerCase().indexOf(pattern) });
-                }
-            }
-            
-            // Repeated patterns analysis
-            const chunks = hexData.match(/.{8}/g) || [];
-            const chunkCounts = {};
-            chunks.forEach(chunk => {
-                if (chunk !== '00000000' && chunk !== 'ffffffff') {
-                    chunkCounts[chunk] = (chunkCounts[chunk] || 0) + 1;
-                }
-            });
-            
-            const repeatedChunks = Object.entries(chunkCounts).filter(([chunk, count]) => count > 1);
-            if (repeatedChunks.length > 0) {
-                patterns.push({ 
-                    name: 'repeated-chunks', 
-                    weight: Math.min(repeatedChunks.length * 2, 5),
-                    details: repeatedChunks.slice(0, 3)
-                });
-            }
-            
-            // Structure analysis (alternating patterns, sequences)
-            const hasSequence = /(?:0123|1234|2345|3456|4567|5678|6789|789a|89ab|9abc|abcd|bcde|cdef)/.test(hexData.toLowerCase());
-            if (hasSequence) {
-                patterns.push({ name: 'sequential-pattern', weight: 2 });
-            }
-            
-            const hasAlternating = /(?:0101|1010|abab|baba|cdcd|dcdc)/.test(hexData.toLowerCase());
-            if (hasAlternating) {
-                patterns.push({ name: 'alternating-pattern', weight: 1 });
-            }
-            
-            return patterns;
-        }
-
-        // Helper function: Calculate pattern confidence
-        function calculatePatternConfidence(patterns) {
-            const totalWeight = patterns.reduce((sum, p) => sum + (p.weight || 1), 0);
-            const maxPossibleWeight = 20; // Arbitrary max for normalization
-            return Math.min(totalWeight / maxPossibleWeight, 1.0);
-        }
-
-        // Helper function: Calculate data density
-        function calculateDataDensity(scriptHex) {
-            if (!scriptHex || scriptHex.length === 0) return 0;
-            
-            // Count unique bytes
-            const chunks = scriptHex.match(/.{2}/g) || [];
-            const uniqueChunks = new Set(chunks);
-            
-            // Calculate entropy-like measure
-            const density = uniqueChunks.size / chunks.length;
-            
-            // Penalize excessive null bytes or repeated patterns
-            const nullBytes = chunks.filter(chunk => chunk === '00').length;
-            const nullPenalty = nullBytes / chunks.length;
-            
-            return Math.max(0, density - nullPenalty);
-        }
-
-        // Helper function: Detect witness protocol patterns
-        function detectWitnessProtocolPatterns(witnessData) {
-            const patterns = [];
-            let confidence = 0;
-            
-            // Length-based heuristics
-            if (witnessData.length > 10000) {
-                patterns.push('large-content');
-                confidence += 0.2;
-            }
-            
-            // Structure patterns
-            const structurePatterns = [
-                { regex: /7b.*7d/, name: 'json-like', weight: 0.3 },
-                { regex: /3c.*3e/, name: 'xml-like', weight: 0.3 },
-                { regex: /22.*22/, name: 'quoted-strings', weight: 0.2 },
-                { regex: /0a.*0a/, name: 'newlines', weight: 0.1 },
-                { regex: /20.*20/, name: 'spaces', weight: 0.1 }
-            ];
-            
-            for (const { regex, name, weight } of structurePatterns) {
-                if (regex.test(witnessData)) {
-                    patterns.push(name);
-                    confidence += weight;
-                }
-            }
-            
-            // Entropy analysis (simplified)
-            const chunks = witnessData.match(/.{2}/g) || [];
-            const uniqueChunks = new Set(chunks);
-            const entropy = uniqueChunks.size / chunks.length;
-            
-            if (entropy > 0.8) {
-                patterns.push('high-entropy');
-                confidence += 0.2;
-            } else if (entropy < 0.3) {
-                patterns.push('low-entropy');
-                confidence += 0.1;
-            }
-            
-            return { patterns, confidence: Math.min(confidence, 1.0) };
-        }
-
-        // Enhanced transaction pattern analysis
-        function analyzeTransactionPatterns(analysis, utxo, txDetails) {
+        // Simplified consolidation-only analysis for cardinals
+        function analyzeConsolidationOnly(analysis, utxo, txDetails) {
             try {
                 const inputCount = txDetails.vin.length;
                 const outputCount = txDetails.vout.length;
-                const totalInputValue = txDetails.vin.reduce((sum, input) => sum + (input.prevout?.value || 0), 0);
-                const totalOutputValue = txDetails.vout.reduce((sum, output) => sum + output.value, 0);
-                const fee = totalInputValue - totalOutputValue;
 
-                debugLog(`Transaction analysis: ${inputCount} inputs, ${outputCount} outputs, fee: ${fee} sats`);
+                debugLog(`Consolidation analysis: ${inputCount} inputs, ${outputCount} outputs`);
 
-                // Enhanced consolidation scoring
+                // Consolidation scoring
                 let consolidationScore = 0;
                 
-                // Input/output ratio scoring
                 if (inputCount >= 50 && outputCount <= 2) consolidationScore += 6;
                 else if (inputCount >= 20 && outputCount <= 2) consolidationScore += 4;
                 else if (inputCount >= 10 && outputCount <= 3) consolidationScore += 3;
                 else if (inputCount >= 5 && outputCount <= 2) consolidationScore += 2;
 
-                // Change pattern detection
-                if (outputCount === 2) {
-                    const outputs = txDetails.vout.sort((a, b) => b.value - a.value);
-                    const ratio = outputs[0].value / outputs[1].value;
-                    if (ratio >= 20) consolidationScore += 3;
-                    else if (ratio >= 10) consolidationScore += 2;
-                    else if (ratio >= 5) consolidationScore += 1;
+                if (consolidationScore >= 3) {
+                    // Remove cardinal and add specific consolidation type
+                    analysis.protocols = analysis.protocols.filter(p => p !== 'cardinal');
+                    
+                    if (consolidationScore >= 6) {
+                        analysis.protocols.push('consolidation-high');
+                    } else if (consolidationScore >= 4) {
+                        analysis.protocols.push('consolidation-medium');
+                    } else {
+                        analysis.protocols.push('consolidation-low');
+                    }
+                    
+                    debugLog(`Consolidation detected (score: ${consolidationScore})`);
                 }
-
-                // Round number detection (suggests intentional consolidation)
-                const mainOutput = txDetails.vout.reduce((max, output) => 
-                    output.value > max.value ? output : max
-                );
-                
-                if (mainOutput.value % 100000000 === 0) consolidationScore += 2; // Round BTC
-                else if (mainOutput.value % 10000000 === 0) consolidationScore += 1; // 0.1 BTC increments
-
-                // Fee analysis (low fees suggest batch processing)
-                const feeRate = fee / (inputCount * 150 + outputCount * 50); // Rough tx size estimate
-                if (feeRate < 5) consolidationScore += 1; // Low fee rate suggests batching
-
-                // Classification with enhanced granularity
-                if (consolidationScore >= 8) {
-                    analysis.protocols.push('consolidation-high');
-                } else if (consolidationScore >= 5) {
-                    analysis.protocols.push('consolidation-medium');
-                } else if (consolidationScore >= 3) {
-                    analysis.protocols.push('consolidation-low');
-                } else if (inputCount >= 10) {
-                    analysis.protocols.push('possible-consolidation');
-                }
-
-                // Enhanced dust/spam detection
-                const dustThreshold = 546; // Bitcoin dust limit
-                const dustOutputs = txDetails.vout.filter(v => v.value <= dustThreshold).length;
-                const dustRatio = dustOutputs / outputCount;
-
-                if (dustRatio > 0.8 && outputCount > 10) {
-                    analysis.protocols.push('dust-spam-high');
-                } else if (dustRatio > 0.5 && outputCount > 5) {
-                    analysis.protocols.push('dust-spam-medium');
-                }
-
-                // Spray transaction detection (1 input, many outputs)
-                if (inputCount === 1 && outputCount > 50) {
-                    analysis.protocols.push('spray-transaction');
-                } else if (inputCount <= 2 && outputCount > 20) {
-                    analysis.protocols.push('distribution-transaction');
-                }
-
-                // Store analysis details
-                analysis.detectionDetails.transactionPattern = {
-                    inputCount,
-                    outputCount,
-                    consolidationScore,
-                    dustRatio,
-                    feeRate,
-                    totalValue: totalOutputValue
-                };
-
-                debugLog(`Transaction pattern analysis complete. Consolidation score: ${consolidationScore}, Dust ratio: ${dustRatio.toFixed(2)}`);
 
             } catch (error) {
-                debugLog('Error analyzing transaction patterns:', error);
+                debugLog('Error analyzing consolidation:', error);
             }
         }
 
-        // Analyze for consolidation patterns
-        function analyzeForConsolidation(analysis, utxo, txDetails) {
+        // Analyze inscription content for BRC-20 and bitmap detection
+        async function analyzeInscriptionContent(analysis, inscriptionId) {
             try {
-                if (!txDetails || !txDetails.vin || !txDetails.vout) {
-                    return;
+                const contentData = await fetchInscriptionContent(inscriptionId);
+                debugLog(`Inscription ${inscriptionId} content data:`, contentData);
+                
+                if (contentData && contentData.content && contentData.contentType) {
+                    const content = contentData.content;
+                    const contentType = contentData.contentType.toLowerCase();
+                    
+                    // Only process text-based content types
+                    const isTextContent = contentType.includes('text/plain') || 
+                                        contentType.includes('text/utf-8') || 
+                                        contentType.includes('application/json') ||
+                                        (contentType.includes('text/') && !contentType.includes('html'));
+                    
+                    if (isTextContent) {
+                        // BRC-20 detection in inscription content
+                        const contentPreview = content.substring(0, 22).toLowerCase();
+                        if (contentPreview.includes('brc-20') || 
+                            contentPreview.includes('brc20') ||
+                            (content.includes('"p":"brc-20"') && content.includes('{'))) {
+                            debugLog(`🪙 BRC-20 content found in ${inscriptionId}: ${contentPreview}`);
+                            analysis.protocols.push('brc-20');
+                            
+                            try {
+                                if (content.trim().startsWith('{')) {
+                                    const brc20Data = JSON.parse(content);
+                                    analysis.brc20Data = {
+                                        content,
+                                        contentType,
+                                        inscriptionId,
+                                        parsedData: brc20Data,
+                                        detectionMethod: 'inscription_content'
+                                    };
+                                } else {
+                                    analysis.brc20Data = {
+                                        content,
+                                        contentType,
+                                        inscriptionId,
+                                        detectionMethod: 'inscription_content_text'
+                                    };
+                                }
+                            } catch (parseError) {
+                                analysis.brc20Data = {
+                                    content,
+                                    contentType,
+                                    inscriptionId,
+                                    detectionMethod: 'inscription_content_unparsed'
+                                };
+                            }
+                        }
+                        
+                        // Bitmap detection
+                        if (content.includes('.bitmap')) {
+                            debugLog(`🗺️ Bitmap content found in ${inscriptionId}: ${content}`);
+                            analysis.protocols.push('bitmap');
+                            
+                            const validation = await validateBitmapContent(content, inscriptionId);
+                            analysis.bitmapData = {
+                                content,
+                                contentType,
+                                inscriptionId,
+                                validation
+                            };
+                        }
+                    } else {
+                        debugLog(`Skipping non-text content type: ${contentType} for ${inscriptionId}`);
+                    }
                 }
-
-                const inputCount = txDetails.vin.length;
-                const outputCount = txDetails.vout.length;
-
-                // Consolidation pattern: many inputs -> few outputs
-                if (inputCount >= 10 && outputCount <= 3) {
-                    analysis.protocols.push('consolidation');
-                } else if (inputCount >= 5 && outputCount <= 2) {
-                    analysis.protocols.push('possible-consolidation');
-                }
-            } catch (error) {
-                debugLog(`Error analyzing consolidation:`, error);
+            } catch (contentError) {
+                debugLog(`Failed to fetch content for inscription ${inscriptionId}:`, contentError);
             }
         }
 
+        // ==================== BITCOIN ADDRESS ANALYSIS ====================
+        // Process UTXOs in parallel
         async function processUTXOsInParallel(utxos) {
             const results = [];
             let processed = 0;
             
-            for (let i = 0; i < utxos.length; i += CONFIG.performance.maxConcurrent) {
-                const batch = utxos.slice(i, i + CONFIG.performance.maxConcurrent);
+            for (let i = 0; i < utxos.length; i += MAX_CONCURRENT) {
+                const batch = utxos.slice(i, i + MAX_CONCURRENT);
                 
                 const batchPromises = batch.map(async (utxo) => {
                     const result = await analyzeUTXO(utxo);
@@ -2249,7 +1307,7 @@
                 results.push(...batchResults);
                 
                 // Small delay between batches
-                if (i + CONFIG.performance.maxConcurrent < utxos.length) {
+                if (i + MAX_CONCURRENT < utxos.length) {
                     await new Promise(resolve => setTimeout(resolve, 300));
                 }
             }
@@ -2262,7 +1320,6 @@
             const address = document.getElementById('addressInput').value.trim();
             const debugModeCheckbox = document.getElementById('debugMode');
             const limitUTXOsCheckbox = document.getElementById('limitUTXOs');
-            const persistentModeCheckbox = document.getElementById('persistentMode');
             const errorContainer = document.getElementById('errorContainer');
             const loadingContainer = document.getElementById('loadingContainer');
             const statsContainer = document.getElementById('statsContainer');
@@ -2336,83 +1393,7 @@
             }
         }
 
-        // ==================== UTILITY FUNCTIONS ====================
-        function isValidBitcoinAddress(address) {
-            const taproot = /^bc1p[a-zA-HJ-NP-Z0-9]{58}$/;
-            const segwit = /^bc1[a-zA-HJ-NP-Z0-9]{25,62}$/;
-            const legacy = /^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$/;
-            
-            return taproot.test(address) || segwit.test(address) || legacy.test(address);
-        }
-
-        function formatSats(sats) {
-            if (sats >= 100000000) {
-                return `${(sats / 100000000).toFixed(8)} BTC`;
-            } else if (sats >= 1000000) {
-                return `${(sats / 1000000).toFixed(2)}M sats`;
-            } else if (sats >= 1000) {
-                return `${(sats / 1000).toFixed(1)}k sats`;
-            }
-            return `${sats.toLocaleString()} sats`;
-        }
-
-        function getStatusIcon(status) {
-            const icons = {
-                'valid': '✅',
-                'valid-high': '🔶',
-                'invalid': '❌',
-                'unknown': '⚠️'
-            };
-            return icons[status] || '❓';
-        }
-
-        // ==================== UI FUNCTIONS ====================
-        function showLoading() {
-            const loadingContainer = document.getElementById('loadingContainer');
-            loadingContainer.innerHTML = `
-                <div class="loading">
-                    <div class="spinner"></div>
-                    <div id="loadingText">Fetching UTXOs...</div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
-                    </div>
-                </div>
-            `;
-        }
-
-        function updateLoadingProgress(current, total) {
-            const loadingText = document.getElementById('loadingText');
-            const progressFill = document.getElementById('progressFill');
-            
-            if (loadingText) {
-                loadingText.textContent = `Analyzing UTXO ${current} of ${total}...`;
-            }
-            
-            if (progressFill) {
-                const percentage = (current / total) * 100;
-                progressFill.style.width = `${percentage}%`;
-            }
-        }
-
-        function hideLoading() {
-            document.getElementById('loadingContainer').innerHTML = '';
-        }
-
-        function showError(message) {
-            const errorContainer = document.getElementById('errorContainer');
-            
-            if (message.includes('CORS') || message.includes('Failed to fetch')) {
-                message += `
-                    <br><br><strong>🔧 CORS Solutions:</strong>
-                    <br>• Install CORS browser extension (CORS Unblock, CORS Everywhere)
-                    <br>• Use Chrome with --disable-web-security flag
-                    <br>• Try different address with known inscriptions
-                `;
-            }
-            
-            errorContainer.innerHTML = `<div class="error-message">${message}</div>`;
-        }
-
+        // ==================== DISPLAY FUNCTIONS ====================
         function displayResults(results) {
             displayStats(results);
             displayBitmapsAndUTXOs(results);
@@ -2429,7 +1410,6 @@
             const rareSatUTXOs = results.filter(r => r.protocols.includes('rare-sat')).length;
             const alkaneUTXOs = results.filter(r => r.protocols.includes('alkane')).length;
             const protoruneUTXOs = results.filter(r => r.protocols.includes('protorune')).length;
-            const stampUTXOs = results.filter(r => r.protocols.includes('stamp')).length;
             const brc20UTXOs = results.filter(r => r.protocols.includes('brc-20')).length;
             const consolidationUTXOs = results.filter(r => r.protocols.includes('consolidation') || r.protocols.includes('possible-consolidation')).length;
             const unknownUTXOs = results.filter(r => r.protocols.includes('unknown-protocol')).length;
@@ -2463,10 +1443,6 @@
                     <div class="stat-card">
                         <div class="stat-number">${protoruneUTXOs}</div>
                         <div class="stat-label">⚡ Protorunes</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number">${stampUTXOs}</div>
-                        <div class="stat-label">📮 Stamps</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-number">${brc20UTXOs}</div>
@@ -2550,7 +1526,7 @@
                             </div>
                             <div style="font-size: 0.8rem; margin-bottom: 8px;">
                                 <strong>Inscription:</strong> 
-                                <a href="${CONFIG.api.ordinals}/inscription/${result.bitmapData.inscriptionId}" 
+                                <a href="${ORDINALS_BASE_URL}/inscription/${result.bitmapData.inscriptionId}" 
                                    target="_blank" class="inscription-link">
                                     ${result.bitmapData.inscriptionId.substring(0, 12)}...
                                 </a>
@@ -2591,7 +1567,7 @@
                         ${results.map(result => `
                             <tr>
                                 <td class="utxo-id">
-                                    <a href="${CONFIG.api.mempool.replace('/api', '')}/tx/${result.txid}" target="_blank" style="color: #667eea; text-decoration: none;">
+                                    <a href="${MEMPOOL_BASE_URL.replace('/api', '')}/tx/${result.txid}" target="_blank" style="color: #c77dff; text-decoration: none;">
                                         ${result.txid.substring(0, 8)}...${result.txid.substring(result.txid.length - 4)}:${result.vout}
                                     </a>
                                 </td>
@@ -2602,8 +1578,10 @@
                                             `<span class="protocol-tag tag-${protocol}">${protocol.replace('-', ' ')}</span>`
                                         ).join('')}
                                     </div>
-                                    ${result.error ? `<div style="color: #e74c3c; font-size: 0.75rem; margin-top: 3px;">${result.error}</div>` : ''}
-                                    ${result.bitmapData ? `<div style="color: #00b894; font-size: 0.75rem; margin-top: 3px;">📄 ${result.bitmapData.content}</div>` : ''}
+                                    ${result.error ? `<div style="color: #ff3547; font-size: 0.75rem; margin-top: 3px;">${result.error}</div>` : ''}
+                                    ${result.bitmapData ? `<div style="color: #c77dff; font-size: 0.75rem; margin-top: 3px;">📄 ${result.bitmapData.content}</div>` : ''}
+                                    ${result.runeData ? generateRuneDisplay(result.runeData) : ''}
+                                    ${result.alkaneData ? `<div style="color: #00cec9; font-size: 0.75rem; margin-top: 3px;">🔷 Alkane: ${result.alkaneData.pattern} (tag: ${result.alkaneData.tag})</div>` : ''}
                                 </td>
                             </tr>
                         `).join('')}
@@ -2612,7 +1590,113 @@
             `;
         }
 
-        // ==================== VISUALIZATION FUNCTIONS ====================
+        // Generate rune display for UTXO table
+        function generateRuneDisplay(runeData) {
+            if (!runeData || !runeData.runes) return '';
+            
+            const runeEntries = Object.entries(runeData.runes);
+            return runeEntries.map(([runeName, runeInfo]) => {
+                const amount = runeInfo.amount ? runeInfo.amount.toLocaleString() : '0';
+                const symbol = runeInfo.symbol || '';
+                const divisibility = runeInfo.divisibility || 0;
+                
+                // Format amount with divisibility
+                let displayAmount = amount;
+                if (divisibility > 0 && runeInfo.amount) {
+                    const divisor = Math.pow(10, divisibility);
+                    displayAmount = (runeInfo.amount / divisor).toFixed(divisibility);
+                }
+                
+                return `<div style="color: #8a2be2; font-size: 0.75rem; margin-top: 3px;">🔮 ${runeName}: ${displayAmount}${symbol ? ' ' + symbol : ''}</div>`;
+            }).join('');
+        }
+
+        // ==================== UTILITY FUNCTIONS ====================
+        function formatSats(sats) {
+            if (sats >= 100000000) {
+                return `${(sats / 100000000).toFixed(8)} BTC`;
+            } else if (sats >= 1000000) {
+                return `${(sats / 1000000).toFixed(2)}M sats`;
+            } else if (sats >= 1000) {
+                return `${(sats / 1000).toFixed(1)}k sats`;
+            }
+            return `${sats.toLocaleString()} sats`;
+        }
+
+        function getStatusIcon(status) {
+            const icons = {
+                'valid': '✅',
+                'valid-high': '🔶',
+                'invalid': '❌',
+                'unknown': '⚠️'
+            };
+            return icons[status] || '❓';
+        }
+
+        function showLoading() {
+            const loadingContainer = document.getElementById('loadingContainer');
+            loadingContainer.innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <div id="loadingText">Fetching UTXOs...</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function updateLoadingProgress(current, total) {
+            const loadingText = document.getElementById('loadingText');
+            const progressFill = document.getElementById('progressFill');
+            
+            if (loadingText) {
+                loadingText.textContent = `Analyzing UTXO ${current} of ${total}...`;
+            }
+            
+            if (progressFill) {
+                const percentage = (current / total) * 100;
+                progressFill.style.width = `${percentage}%`;
+            }
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingContainer').innerHTML = '';
+        }
+
+        function showError(message) {
+            const errorContainer = document.getElementById('errorContainer');
+            
+            if (message.includes('CORS') || message.includes('Failed to fetch')) {
+                message += `
+                    <br><br><strong>🔧 CORS Solutions:</strong>
+                    <br>• Install CORS browser extension (CORS Unblock, CORS Everywhere)
+                    <br>• Use Chrome with --disable-web-security flag
+                    <br>• Try different address with known inscriptions
+                `;
+            }
+            
+            errorContainer.innerHTML = `<div class="error-message">${message}</div>`;
+        }
+
+        function clearAllCaches() {
+            txCache.clear();
+            ordinalsCache.clear();
+            contentCache.clear();
+            validationCache.clear();
+            bitmapCache.clear();
+            visualizationCache.clear();
+            mondrianModule.clear();
+            
+            for (let i = 0; i < bitmapPages.length; i++) {
+                bitmapPages[i] = 0;
+            }
+            
+            console.log('All caches cleared');
+            alert('All caches cleared successfully!');
+        }
+
+        // Auto-load all bitmap visualizations
         async function autoLoadBitmapVisualizations(bitmapResults) {
             debugLog(`Auto-loading ${bitmapResults.length} bitmap visualizations...`);
             
@@ -2623,56 +1707,72 @@
                     const inscriptionId = result.bitmapData.inscriptionId;
                     
                     if (bitmapNumber && inscriptionId) {
+                        // Add small delay between loads to prevent overwhelming
                         setTimeout(() => {
                             loadBitmapVisualization(inscriptionId, bitmapNumber);
-                        }, 500);
+                        }, 500); // 500ms delay
                     }
                 }
             }
         }
 
+        // Load bitmap visualization with automatic Mondrian layout
         async function loadBitmapVisualization(inscriptionId, bitmapNumber) {
             const container = document.getElementById(`viz-${inscriptionId}`);
             if (!container) return;
 
             try {
-                const cacheKey = `viz_${bitmapNumber}`;
-                const cached = await dataManager.get('visualizations', cacheKey);
-                if (cached) {
-                    container.innerHTML = cached;
+                // Check cache first
+                const cacheKey = `viz-${bitmapNumber}`;
+                if (visualizationCache.has(cacheKey)) {
+                    container.innerHTML = visualizationCache.get(cacheKey);
                     return;
                 }
 
                 container.innerHTML = '<div style="color: #fff; text-align: center; line-height: 250px; font-size: 0.8rem;">🔄 Loading Mondrian pattern...</div>';
                 
-                // Load Mondrian module
-                if (!importManager.hasModule('mondrian')) {
-                    await importManager.importModule('mondrian', CONFIG.modules.mondrian);
+                // Load Mondrian module if not already loaded
+                if (!mondrianModule.has('module')) {
+                    debugLog('Loading Mondrian module...');
+                    const moduleResponse = await rateLimitedFetch('https://ordinals.com/content/55551557695dd82a2bda5ec3497684ec7cbb2cc1752ff5101accff1648666c3ai0');
+                    const moduleCode = await moduleResponse.text();
+                    
+                    // Create module blob and import
+                    const moduleBlob = new Blob([moduleCode], { type: 'application/javascript' });
+                    const moduleUrl = URL.createObjectURL(moduleBlob);
+                    const module = await import(moduleUrl);
+                    
+                    mondrianModule.set('module', module);
+                    debugLog('Mondrian module loaded successfully');
                 }
 
-                const module = importManager.getModule('mondrian');
+                const module = mondrianModule.get('module');
                 
-                // Get block data
+                // Get block data for the bitmap number (using it as block number)
                 let blockData;
                 try {
-                    const blockResponse = await rateLimitedFetch(`${CONFIG.api.blockchain}/rawblock/${bitmapNumber}?cors=true`);
+                    const blockResponse = await rateLimitedFetch(`https://blockchain.info/rawblock/${bitmapNumber}?cors=true`);
                     blockData = await blockResponse.json();
                 } catch (blockError) {
+                    // If can't get real block data, generate synthetic data
                     debugLog(`Could not fetch block ${bitmapNumber}, generating synthetic data`);
                     blockData = generateSyntheticBlockData(bitmapNumber);
                 }
 
-                // Create visualization
+                // Process transaction data into square sizes
                 const sizes = blockData.tx.map(tx => 
                     module.getSquareSize(tx.out.reduce((s, o) => s + o.value, 0))
                 );
 
+                // Create Mondrian layout
                 const mondrian = new module.MondrianLayout(sizes);
                 
+                // Calculate scaling to fit container
                 const containerWidth = container.offsetWidth || 300;
                 const containerHeight = container.offsetHeight || 250;
                 const scale = Math.min(containerWidth / mondrian.width, containerHeight / mondrian.height);
 
+                // Create visualization HTML with single orange color
                 let visualizationHTML = '<div style="position: relative; width: 100%; height: 100%; cursor: pointer;" onclick="openFullscreen(\'' + inscriptionId + '\', ' + bitmapNumber + ')">';
                 
                 mondrian.slots.forEach((slot, i) => {
@@ -2681,8 +1781,9 @@
                     const width = (slot.size - 0.5) * scale;
                     const height = (slot.size - 0.5) * scale;
                     
-                    const colors = ['#ff6b35', '#f7931e', '#ffd23f', '#06ffa5', '#118ab2', '#073b4c'];
-                    const color = colors[i % colors.length];
+                    // Use single orange color for all bitmap parcels
+                    const orangeColor = '#ff9500';
+                    const hoverColor = '#e67e00';
                     
                     visualizationHTML += `
                         <div style="
@@ -2691,20 +1792,17 @@
                             top: ${y}px;
                             width: ${width}px;
                             height: ${height}px;
-                            background-color: ${color};
+                            background-color: ${orangeColor};
                             border: 1px solid rgba(255,255,255,0.3);
                             transition: all 0.2s ease;
-                        " onmouseover="this.style.backgroundColor='#e74c3c'; this.textContent='${i}'" onmouseout="this.style.backgroundColor='${color}'; this.textContent=''"></div>
+                        " onmouseover="this.style.backgroundColor='${hoverColor}'; this.textContent='${i}'" onmouseout="this.style.backgroundColor='${orangeColor}'; this.textContent=''"></div>
                     `;
                 });
                 
                 visualizationHTML += '</div>';
                 
                 // Cache and display
-                await dataManager.set('visualizations', cacheKey, visualizationHTML, {
-                    persistent: true,
-                    ttl: CONFIG.cache.bitmapTTL
-                });
+                visualizationCache.set(cacheKey, visualizationHTML);
                 container.innerHTML = visualizationHTML;
                 
                 debugLog(`Bitmap visualization loaded for ${bitmapNumber}`);
@@ -2714,166 +1812,7 @@
                 container.innerHTML = `<div style="color: #e74c3c; text-align: center; line-height: 250px; font-size: 0.8rem;">⚠️ Visualization unavailable</div>`;
             }
         }
-
-        function generateSyntheticBlockData(bitmapNumber) {
-            const seed = parseInt(bitmapNumber) || 1;
-            const random = (s) => {
-                const x = Math.sin(s) * 10000;
-                return x - Math.floor(x);
-            };
-            
-            const numTx = 5 + Math.floor(random(seed) * 15);
-            const transactions = [];
-            
-            for (let i = 0; i < numTx; i++) {
-                const txSeed = seed * 1000 + i;
-                const numOutputs = 1 + Math.floor(random(txSeed) * 4);
-                const outputs = [];
-                
-                for (let j = 0; j < numOutputs; j++) {
-                    const outputSeed = txSeed * 100 + j;
-                    const value = Math.floor(random(outputSeed) * 100000000);
-                    outputs.push({ value });
-                }
-                
-                transactions.push({ out: outputs });
-            }
-            
-            return { tx: transactions };
-        }
-
-        // ==================== ENHANCED UTILITY FUNCTIONS ====================
-        async function clearAllCaches() {
-            dataManager.clearCache();
-            
-            // Clear localStorage
-            if (window.localStorage) {
-                const keys = [];
-                for (let i = 0; i < localStorage.length; i++) {
-                    const key = localStorage.key(i);
-                    if (key && key.startsWith('btc_analyzer_')) {
-                        keys.push(key);
-                    }
-                }
-                keys.forEach(key => localStorage.removeItem(key));
-            }
-            
-            // Clear bitmap pages
-            for (let i = 0; i < bitmapPages.length; i++) {
-                bitmapPages[i] = 0;
-            }
-            
-            console.log('All caches cleared');
-            alert('All caches cleared successfully!');
-        }
-
-        async function exportData() {
-            try {
-                const exportData = dataManager.exportData();
-                const dataStr = JSON.stringify(exportData, null, 2);
-                const dataBlob = new Blob([dataStr], { type: 'application/json' });
-                
-                const url = URL.createObjectURL(dataBlob);
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = `btc_analyzer_export_${Date.now()}.json`;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                URL.revokeObjectURL(url);
-                
-                alert('Data exported successfully!');
-            } catch (error) {
-                console.error('Export error:', error);
-                alert('Export failed: ' + error.message);
-            }
-        }
-
-        async function importData() {
-            try {
-                const input = document.createElement('input');
-                input.type = 'file';
-                input.accept = '.json';
-                
-                input.onchange = async (e) => {
-                    const file = e.target.files[0];
-                    if (!file) return;
-                    
-                    const text = await file.text();
-                    const importData = JSON.parse(text);
-                    
-                    await dataManager.importData(importData);
-                    alert('Data imported successfully!');
-                };
-                
-                input.click();
-            } catch (error) {
-                console.error('Import error:', error);
-                alert('Import failed: ' + error.message);
-            }
-        }
-
-        async function testBitmapValidation() {
-            console.log('Testing bitmap validation...');
-            
-            try {
-                const result = await validateBitmap(0);
-                console.log('Bitmap 0 validation result:', result);
-                
-                const invalidResult = await validateBitmapContent('invalid.format', 'test');
-                console.log('Invalid format result:', invalidResult);
-                
-                alert('Bitmap validation test completed. Check console for results.');
-            } catch (error) {
-                console.error('Bitmap validation test error:', error);
-                alert(`Test error: ${error.message}`);
-            }
-        }
-
-        function showSystemInfo() {
-            const importStats = importManager.getSystemStatus();
-            const dataStats = dataManager.getStats();
-            
-            const info = `
-System Information:
-===================
-
-Import Manager:
-- Modules Loaded: ${importStats.modulesLoaded}
-- Loading in Progress: ${importStats.loadingInProgress}
-- Total Import Attempts: ${importStats.totalImportAttempts}
-- Successful Imports: ${importStats.successfulImports}
-- Failed Imports: ${importStats.failedImports}
-
-Data Manager:
-- Cache Types: ${dataStats.cacheTypes}
-- Total Entries: ${dataStats.totalEntries}
-- Total Cache Size: ${(dataStats.totalSize / 1024 / 1024).toFixed(2)} MB
-- Persistent Entries: ${dataStats.persistentEntries}
-
-Cache Details:
-${Object.entries(dataStats.cacheDetails).map(([type, details]) => 
-    `- ${type}: ${details.entries} entries (${(details.size / 1024).toFixed(1)} KB)`
-).join('\n')}
-
-Browser Support:
-- localStorage: ${!!window.localStorage}
-- IndexedDB: ${!!window.indexedDB}
-- WebWorkers: ${!!window.Worker}
-- Fetch API: ${!!window.fetch}
-
-Performance Metrics:
-- Max Cache Size: ${(CONFIG.cache.maxSize / 1024 / 1024).toFixed(0)} MB
-- Fetch Delay: ${CONFIG.performance.fetchDelay} ms
-- Max Concurrent: ${CONFIG.performance.maxConcurrent}
-- Request Timeout: ${CONFIG.performance.requestTimeout / 1000} seconds
-            `.trim();
-            
-            alert(info);
-            console.log(info);
-        }
-
-        // Fullscreen visualization functions
+        // Open fullscreen visualization
         function openFullscreen(inscriptionId, bitmapNumber) {
             const fullscreenHTML = `
                 <div id="fullscreenVisualization" style="
@@ -2890,7 +1829,7 @@ Performance Metrics:
                     justify-content: center;
                     color: white;
                 " onclick="closeFullscreen()">
-                    <div style="position: absolute; top: 20px; right: 20px; font-size: 2rem; cursor: pointer; z-index: 10001;" onclick="closeFullscreen()">✕</div>
+                    <div style="position: absolute; top: 20px; right: 20px; font-size:  2rem; cursor: pointer; z-index: 10001;" onclick="closeFullscreen()">✕</div>
                     <h2 style="margin-bottom: 20px; color: #f7931e;">Bitmap #${bitmapNumber} - Mondrian Visualization</h2>
                     <div id="fullscreenContainer" style="width: 80vmin; height: 80vmin; border: 2px solid #f7931e;"></div>
                     <div style="margin-top: 20px; text-align: center; max-width: 600px; font-size: 0.9rem; opacity: 0.8;">
@@ -2903,15 +1842,18 @@ Performance Metrics:
             
             document.body.insertAdjacentHTML('beforeend', fullscreenHTML);
             
+            // Load the visualization in fullscreen
             setTimeout(async () => {
                 const fullscreenContainer = document.getElementById('fullscreenContainer');
                 if (fullscreenContainer) {
+                    // Create a temporary container element for loadBitmapVisualization
                     fullscreenContainer.id = `viz-${inscriptionId}-fullscreen`;
                     await loadBitmapVisualizationFullscreen(inscriptionId, bitmapNumber);
                 }
             }, 100);
         }
 
+        // Load bitmap visualization for fullscreen
         async function loadBitmapVisualizationFullscreen(inscriptionId, bitmapNumber) {
             const container = document.getElementById(`viz-${inscriptionId}-fullscreen`);
             if (!container) return;
@@ -2919,14 +1861,15 @@ Performance Metrics:
             try {
                 container.innerHTML = '<div style="color: #fff; text-align: center; line-height: 200px; font-size: 1rem;">🔄 Loading fullscreen visualization...</div>';
                 
-                const module = importManager.getModule('mondrian');
+                const module = mondrianModule.get('module');
                 if (!module) {
                     throw new Error('Mondrian module not loaded');
                 }
 
+                // Get or generate block data
                 let blockData;
                 try {
-                    const blockResponse = await rateLimitedFetch(`${CONFIG.api.blockchain}/rawblock/${bitmapNumber}?cors=true`);
+                    const blockResponse = await rateLimitedFetch(`https://blockchain.info/rawblock/${bitmapNumber}?cors=true`);
                     blockData = await blockResponse.json();
                 } catch {
                     blockData = generateSyntheticBlockData(bitmapNumber);
@@ -2949,8 +1892,9 @@ Performance Metrics:
                     const width = (slot.size - 0.5) * scale;
                     const height = (slot.size - 0.5) * scale;
                     
-                    const colors = ['#ff6b35', '#f7931e', '#ffd23f', '#06ffa5', '#118ab2', '#073b4c', '#e63946', '#f77f00', '#fcbf49', '#003049'];
-                    const color = colors[i % colors.length];
+                    // Use single orange color for all bitmap parcels in fullscreen
+                    const orangeColor = '#ff9500';
+                    const hoverColor = '#e67e00';
                     
                     visualizationHTML += `
                         <div style="
@@ -2959,7 +1903,7 @@ Performance Metrics:
                             top: ${y}px;
                             width: ${width}px;
                             height: ${height}px;
-                            background-color: ${color};
+                            background-color: ${orangeColor};
                             border: 2px solid rgba(255,255,255,0.4);
                             transition: all 0.3s ease;
                             display: flex;
@@ -2968,7 +1912,7 @@ Performance Metrics:
                             color: white;
                             font-weight: bold;
                             text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
-                        " onmouseover="this.style.backgroundColor='#e74c3c'; this.style.transform='scale(1.05)'; this.textContent='TX ${i}'" onmouseout="this.style.backgroundColor='${color}'; this.style.transform='scale(1)'; this.textContent=''"></div>
+                        " onmouseover="this.style.backgroundColor='${hoverColor}'; this.style.transform='scale(1.05)'; this.textContent='Parcel ${i}'" onmouseout="this.style.backgroundColor='${orangeColor}'; this.style.transform='scale(1)'; this.textContent=''"></div>
                     `;
                 });
                 
@@ -2976,10 +1920,11 @@ Performance Metrics:
                 container.innerHTML = visualizationHTML;
                 
             } catch (error) {
-                container.innerHTML = `<div style="color: #e74c3c; text-align: center; line-height: 200px; font-size: 1rem;">⚠️ Error: ${error.message}</div>`;
+                container.innerHTML = `<div style="color: #e74c3c; text-align: center; line-height: 200px; font-size: 1rem; z-index: 10002; position: relative;">⚠️ Error: ${error.message}</div>`;
             }
         }
 
+        // Close fullscreen visualization
         function closeFullscreen() {
             const fullscreen = document.getElementById('fullscreenVisualization');
             if (fullscreen) {
@@ -2987,40 +1932,41 @@ Performance Metrics:
             }
         }
 
-        // ==================== EVENT LISTENERS ====================
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize the app
-            initializeApp();
+        // Test bitmap validation function
+        async function testBitmapValidation() {
+            console.log('Testing bitmap validation...');
             
-            // Address input enter key handler
-            const addressInput = document.getElementById('addressInput');
-            if (addressInput) {
-                addressInput.addEventListener('keypress', function(event) {
-                    if (event.key === 'Enter') {
-                        analyzeAddress();
-                    }
-                });
+            try {
+                // Test bitmap 0
+                const result = await validateBitmap(0);
+                console.log('Bitmap 0 validation result:', result);
+                
+                // Test invalid format
+                const invalidResult = await validateBitmapContent('invalid.format', 'test');
+                console.log('Invalid format result:', invalidResult);
+                
+                alert('Bitmap validation test completed. Check console for results.');
+            } catch (error) {
+                console.error('Bitmap validation test error:', error);
+                alert(`Test error: ${error.message}`);
+            }
+        }
+
+        // Event listeners
+        document.getElementById('addressInput').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                analyzeAddress();
             }
         });
 
-        // ==================== GLOBAL FUNCTION EXPOSURE ====================
-        window.analyzeAddress = analyzeAddress;
-        window.clearAllCaches = clearAllCaches;
-        window.exportData = exportData;
-        window.importData = importData;
-        window.testBitmapValidation = testBitmapValidation;
-        window.showSystemInfo = showSystemInfo;
-        window.openFullscreen = openFullscreen;
-        window.closeFullscreen = closeFullscreen;
+        // Make functions globally available
         window.loadBitmapVisualization = loadBitmapVisualization;
         window.autoLoadBitmapVisualizations = autoLoadBitmapVisualizations;
-
-        // Debug exposure for development
-        if (window.DEBUG_MODE) {
-            window.importManager = importManager;
-            window.dataManager = dataManager;
-            window.CONFIG = CONFIG;
-        }
+        window.openFullscreen = openFullscreen;
+        window.closeFullscreen = closeFullscreen;
+        window.clearAllCaches = clearAllCaches;
+        window.testBitmapValidation = testBitmapValidation;
+        window.analyzeAddress = analyzeAddress;
     </script>
 </body>
 </html>
